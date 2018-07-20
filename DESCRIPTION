@@ -1,6 +1,6 @@
 Package: jstor
 Title: Read Data from JSTOR/DfR
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: person("Thomas", "Klebel", email = "t.klebel@hotmail.com", 
                   role = c("aut", "cre"))
 Description: Functions and helpers to import metadata, ngrams and full-texts 
@@ -20,8 +20,8 @@ URL: https://github.com/ropensci/jstor,
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2018-07-08 15:08:23 UTC; tklebel
+Packaged: 2018-07-15 12:50:00 UTC; tklebel
 Author: Thomas Klebel [aut, cre]
 Maintainer: Thomas Klebel <t.klebel@hotmail.com>
 Repository: CRAN
-Date/Publication: 2018-07-13 14:20:02 UTC
+Date/Publication: 2018-07-20 13:30:03 UTC

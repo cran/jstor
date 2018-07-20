@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2018-07-08" />
+<meta name="date" content="2018-07-15" />
 
 <title>Automating File Import</title>
 
@@ -280,7 +280,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Automating File Import</h1>
 <h4 class="author"><em>Thomas Klebel</em></h4>
-<h4 class="date"><em>2018-07-08</em></h4>
+<h4 class="date"><em>2018-07-15</em></h4>
 
 
 
@@ -365,7 +365,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>As you can see, <code>jst_import_zip()</code> automatically creates file names based on the string you supplied to <code>out_file</code> to delianate the different types of output.</p>
 <p>If we want to re-import the data for further analysis, we can either use functions like <code>readr::read_csv()</code>, or a small helper function from the package which determines and sets the column types correctly:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">jst_re_import</span>(</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="kw">paste0</span>(tmp, <span class="st">&quot;/my_test_journal_article_jst_get_article-1.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="kw">file.path</span>(tmp, <span class="st">&quot;my_test_journal_article_jst_get_article-1.csv&quot;</span>)</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3">) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
@@ -444,9 +444,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2><code>list.files</code></h2>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">file_names_listed &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path =</span> example_dir, <span class="dt">full.names =</span> T, <span class="dt">pattern =</span> <span class="st">&quot;*.xml&quot;</span>)</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">file_names_listed</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpvuR4fR/Rinst26f42e66460/jstor/extdata/sample_book.xml&quot;           </span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; [2] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpvuR4fR/Rinst26f42e66460/jstor/extdata/sample_with_footnotes.xml&quot; </span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [3] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpvuR4fR/Rinst26f42e66460/jstor/extdata/sample_with_references.xml&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmplnUp7T/Rinst1cec610faef5/jstor/extdata/sample_book.xml&quot;           </span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; [2] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmplnUp7T/Rinst1cec610faef5/jstor/extdata/sample_with_footnotes.xml&quot; </span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [3] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmplnUp7T/Rinst1cec610faef5/jstor/extdata/sample_with_references.xml&quot;</span></a></code></pre></div>
 <div id="system-and-find" class="section level3">
 <h3><code>system</code> and <code>find</code></h3>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">file_names &lt;-<span class="st"> </span><span class="kw">system</span>(<span class="kw">paste0</span>(<span class="st">&quot;cd &quot;</span>, example_dir, <span class="st">&quot;; find . -name '*.xml' -type f&quot;</span>), <span class="dt">intern =</span> <span class="ot">TRUE</span>)</a></code></pre></div>

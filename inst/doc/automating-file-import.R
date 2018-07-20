@@ -35,7 +35,7 @@ list.files(tmp, pattern = "csv")
 
 ## ------------------------------------------------------------------------
 jst_re_import(
-  paste0(tmp, "/my_test_journal_article_jst_get_article-1.csv")
+  file.path(tmp, "my_test_journal_article_jst_get_article-1.csv")
 ) %>% 
   knitr::kable()
 

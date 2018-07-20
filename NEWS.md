@@ -1,3 +1,9 @@
+# jstor 0.3.2
+This is a hotfix to resolve an issue with writing to other directories than
+temporary folders during tests, which should not have happend in the first 
+place.
+
+
 # jstor 0.3.1
 
 * `jstor` is now part of rOpenSci.
