@@ -2,7 +2,7 @@
 % Please edit documentation in R/deprecated.R
 \name{find_chapters}
 \alias{find_chapters}
-\title{Extract information on book chapters}
+\title{Defunct: Extract information on book chapters}
 \usage{
 find_chapters(file_path, authors = FALSE)
 }
@@ -27,20 +27,25 @@ for joining with other data for the same file.
 \item part_title \emph{(chr)}: The title of the part.
 \item part_subtitle \emph{(chr)}: The subtitle of the part, if specified.
 \item authors \emph{(list)}: A list-column with information on the authors. Can be
-unnested with \code{\link[tidyr:unnest]{tidyr::unnest()}}. See the examples and \code{\link[=find_authors]{find_authors()}}.
+unnested with \code{\link[tidyr:unnest]{tidyr::unnest()}}. See the examples
+and \code{\link[=find_authors]{find_authors()}}.
 \item abstract \emph{(chr)}: The abstract to the part.
 \item part_first_page \emph{(chr)}: The page where the part begins.
 }
 }
 \description{
-\code{find_chapters()} extracts meta-data from JSTOR-XML files for book chapters.
+This function will be removed in the next release. Please use
+\code{jst_get_chapters()} instead.
 }
 \details{
+\code{find_chapters()} extracts meta-data from JSTOR-XML files for book chapters.
+
 Currently, \code{find_chapters()} is quite a lot slower than most of the other
 functions. It is roughly 10 times slower than \code{find_book}, depending on the
 number of chapters to extract.
 }
 \examples{
+\dontrun{ 
 # extract parts without authors
 find_chapters(jstor_example("sample_book.xml"))
 
@@ -49,4 +54,5 @@ parts <- find_chapters(jstor_example("sample_book.xml"), authors = TRUE)
 parts
 
 tidyr::unnest(parts)
+}
 }

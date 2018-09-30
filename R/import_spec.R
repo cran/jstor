@@ -44,7 +44,7 @@
 #' imports <- jst_define_import(article = c(jst_get_article, jst_get_authors))
 #' 
 #' # convert the files to .csv
-#' jstor_import_zip("my_archive.zip", out_file = "my_out_file", 
+#' jst_import_zip("my_archive.zip", out_file = "my_out_file", 
 #'                  import_spec = imports)
 #' }
 #' @export
@@ -59,8 +59,10 @@ jst_define_import <- function(...) {
   types_checked <- type %in% possible_types
   
   if (!all(types_checked)) {
-    stop("Input type must be one of ", paste(possible_types, collapse = ", "),
-         ", `", type[!types_checked], "` is not.")
+    stop("Input type must be one of ", 
+         paste(crayon::green(possible_types), collapse = ", "),
+         ".\n", crayon::blue(type[!types_checked]), " is not one of them.",
+         call. = FALSE)
   }
   
   
@@ -87,8 +89,8 @@ jst_define_import <- function(...) {
     str_detect("\\(\\)")
 
   if (any(not_bare_funs)) {
-    stop("All inputs must be bare functions or a vector of bare functions, `",
-         expressions[not_bare_funs], "` is not.", call. = FALSE)
+    stop("All inputs must be bare functions or a vector of bare functions, ",
+         crayon::blue(expressions[not_bare_funs]), " is not.", call. = FALSE)
   }
 
   evaled_funs <- import_spec %>% map(eval_tidy) 
@@ -99,8 +101,8 @@ jst_define_import <- function(...) {
   
   
   if (!all(funs_checked)) {
-    stop("All inputs must be bare functions or a vector of bare functions, `",
-         fun_names[[1]][!funs_checked], "` is not.", call. = FALSE)
+    stop("All inputs must be bare functions or a vector of bare functions, ",
+         crayon::blue(fun_names[[1]][!funs_checked]), " is not.", call. = FALSE)
   }
   
   # check namespaces of functions
@@ -110,18 +112,85 @@ jst_define_import <- function(...) {
   
   
   if (!all(matching_namespaces)) {
-    stop("All supplied functions must come from the `jstor` package, `",
-         fun_names[[1]][!matching_namespaces], "` does not.",
+    stop("All supplied functions must come from the ", crayon::green("jstor"),
+         " package, but ",
+         crayon::blue(fun_names[[1]][!matching_namespaces]), " does not.",
          call. = FALSE)
   }
   
-
+  # # check if functions match source type
+  # this is quite hacky, using the way `walk_spec` works to raise a general
+  # error if something is not fitting. Ideally we would catch the error
+  # exactly where it occurs and display an informative error message, but this
+  # is a bit complex since we need to map over several inputs and possibly
+  # several functions to deal with each input.
+  correct_types <- tibble::tribble(
+    ~meta_type, ~path,
+    "journal_article", jst_example("sample_with_references.xml"),
+    "book_chapter", jst_example("sample_book.xml"),
+    "research_report", jst_example("sample_book.xml"),
+    "pamphlet", jst_example("sample_with_references.xml"),
+    "ngram1", jst_example("sample_ngram.txt"),
+    "ngram2", jst_example("sample_ngram.txt"),
+    "ngram3", jst_example("sample_ngram.txt")
+  )
+  
+  matched_types <- tibble::tibble(meta_type = type, evaled_funs = evaled_funs,
+                              fun_names = fun_names, chunk_number = 1) %>% 
+    dplyr::left_join(correct_types, by = "meta_type") 
+  
+  evaluation <- rlang::catch_cnd(
+    matched_types %>% 
+        split(.$meta_type) %>% 
+        purrr::map(walk_spec, n_batches = 1,
+                    chunk_number = 1, out_path = "",
+                    show_progress = FALSE, col_names = "",
+                    test_mode = T)
+  )
+ 
+  if (!is.null(evaluation) && "error" %in% attr(evaluation, "class")) {
+    stop("Your import specification seems to be incorrect. Please make sure ",
+         "that all import functions correspond to the right data type.",
+         call. = FALSE)
+  }
+ 
+ 
+  
+  # if everything is ok, combine results and return them
   out <- tibble::tibble(meta_type = type, fun_names = fun_names,
                         evaled_funs = evaled_funs, bare_funs = import_spec)
   
   class(out) <- c("jstor_import_spec", class(out))
   out
 }
+
+
+print.jstor_import_spec <- function(x, ...) {
+  cli::cat_rule(left = crayon::bold("Import specification"))
+  
+  cli::cat_line(
+    crayon::col_align(paste0("  ", crayon::underline("Source")), width = 20),
+    crayon::col_align(crayon::underline("Import functions"))
+  )
+
+  print_part <- function(type, functions) {
+    type_formatted <- type %>% stringr::str_to_title() %>% str_replace("_", " ") 
+    
+    imports <- paste0(
+      crayon::col_align(
+        paste(crayon::green(cli::symbol$bullet), type_formatted), width = 20
+      ),
+      crayon::col_align(
+        paste(crayon::blue(functions), collapse = ", "), width = 20
+      ))
+    
+    cat(imports)
+    cli::cat_line()
+  }
+  
+  purrr::walk2(x$meta_type, x$fun_names, print_part)
+}
+
 
 capture_functions <- function(...) {
   dots <- enquos(..., .named = T)
@@ -153,9 +222,23 @@ check_env <- function(fun) {
 
 
 walk_spec <- function(spec_df, chunk_number, n_batches, out_path,
-                      show_progress, col_names) {
-  message("Processing files for ", paste(unique(spec_df$meta_type), collapse = " and "),
-          " with functions ", unique(spec_df$fun_names))
+                      show_progress, col_names, test_mode = FALSE) {
+  if (!test_mode) {
+    message(
+      "Processing files for ", 
+      paste(
+        crayon::green(unique(spec_df$meta_type)),
+        collapse = " and "
+      ), 
+      " with functions ", 
+      crayon::blue(
+        paste(
+          unlist(spec_df$fun_names),
+          collapse = ", ")
+        )
+      )
+  }
+
   
   funs <- spec_df$evaled_funs
   
@@ -171,7 +254,7 @@ walk_spec <- function(spec_df, chunk_number, n_batches, out_path,
   
   fun_spec <- spec_df %>% 
     tidyr::unnest(fun_names) %>% 
-    dplyr::distinct(meta_type, type, fun_names)
+    dplyr::distinct(meta_type, fun_names)
     
   out_paths <- fun_spec %>% 
     mutate(out_paths = paste(out_path, meta_type, fun_names, sep = "_")) %>% 
@@ -202,15 +285,23 @@ walk_spec <- function(spec_df, chunk_number, n_batches, out_path,
   # due to some quirks in transpose():
   # https://github.com/tidyverse/purrr/issues/474
   
-  purrr::pwalk(
-    list(
-      n_batches = n_batches, 
-      out_path = out_paths_recycled, in_paths = in_paths_recycled,
-      chunk_number = chunk_number_recycled,
-      fun = funs_recycled,
-      show_progress = show_progress, col_names = col_names
-    ),
-    jstor_convert_to_file
-  )
+  if (!test_mode) {
+    purrr::pwalk(
+      list(
+        n_batches = n_batches, 
+        out_path = out_paths_recycled, in_paths = in_paths_recycled,
+        chunk_number = chunk_number_recycled,
+        fun = funs_recycled,
+        show_progress = show_progress, col_names = col_names
+      ),
+      jstor_convert_to_file
+    )
+  } else {
+    
+    mapper <- function(x, fun) map(x, fun)
+
+    purrr::pmap(list(x = in_paths_recycled, fun = funs_recycled), mapper)
+    
+  }
   
 }

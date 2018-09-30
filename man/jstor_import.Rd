@@ -2,11 +2,11 @@
 % Please edit documentation in R/deprecated.R
 \name{jstor_import}
 \alias{jstor_import}
-\title{Wrapper for file import}
+\title{Defunct: Wrapper for file import}
 \usage{
 jstor_import(in_paths, out_file, out_path = NULL, .f, col_names = TRUE,
-  n_batches = NULL, files_per_batch = NULL, cores = getOption("mc.cores",
-  1L), show_progress = TRUE)
+  n_batches = NULL, files_per_batch = NULL,
+  cores = getOption("mc.cores", 1L), show_progress = TRUE)
 }
 \arguments{
 \item{in_paths}{A character vector to the \code{xml}-files which should be
@@ -37,16 +37,19 @@ is interactive.}
 Writes \code{.csv}-files to disk.
 }
 \description{
+This function will be removed in the next release. Please use
+\code{jst_import()} instead.
+}
+\details{
 This function applies an import function to a list of \code{xml}-files
 or a .zip-archive in case of \code{jstor_import_zip} and saves
 the output in batches of \code{.csv}-files to disk.
-}
-\details{
+
 Along the way, we wrap three functions, which make the process of converting
 many files easier:
 \itemize{
 \item \code{\link[purrr:safely]{purrr::safely()}}
-\item \code{\link[foreach:foreach]{foreach::foreach()}}
+\item \code{foreach::foreach()}
 \item \code{\link[readr:write_csv]{readr::write_csv()}}
 }
 
@@ -57,7 +60,7 @@ continue the process, and catch the error along the way.
 
 If you have many files to import, you might benefit from executing the
 function in parallel. We use
-\code{\link[snow:snow-startstop]{snow::createCluster()}} to setup a cluster
+\code{snow::createCluster()} to setup a cluster
 and
 then compute the results via \code{foreach} and \code{\%dopar\%}. The type of
 cluster is determined by \code{getClusterOption("type")}.
@@ -68,7 +71,7 @@ After importing all files, they are written to disk with
 Since you might run out of memory when importing a large quantity of files,
 the files to import are split up into batches. Each batch is being treated
 separately, therefore for each batch multiple processes from
-\code{\link[snow:snow-startstop]{snow::createCluster()}} are
+\code{snow::createCluster()} are
 spawned. For this reason, it is not recommended to have very small batches,
 as there is an overhead for starting and ending the processes. On the other
 hand, the batches should not be too large, to not exceed memory limitations.

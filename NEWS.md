@@ -1,3 +1,27 @@
+# jstor 0.3.3
+
+## Removed functionality
+* The option to download the most recent data on journals directly from JSTOR
+(as in `jst_get_journal_overview(most_recent = T)`)
+had to be removed due changes on their server. I will try to find a solution
+with JSTOR support so we can add the functionality again.
+
+## New features
+* `jst_define_import` now prints the specification in a pretty and informative
+way.
+* `jst_define_import` now checks the definition more extensively: 
+`jst_define_import(article = jst_get_book)` or similar mis-specifications 
+will raise an error.
+* Import the crayon package for more colourful error messages in some places,
+which are easier to read.
+
+## Bug fixes
+* Removed an outdated function from the vignette on batch importing files.
+
+## Other changes
+* The old group of `find_*` functions is now defunct (they raise an error).
+* Updated cached version of journal data.
+
 # jstor 0.3.2
 This is a hotfix to resolve an issue with writing to other directories than
 temporary folders during tests, which should not have happend in the first 

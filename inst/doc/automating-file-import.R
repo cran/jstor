@@ -80,7 +80,7 @@ article_paths %>%
 
 
 ## ------------------------------------------------------------------------
-jst_import(article_paths, out_file = "my_second_test", .f = find_article, 
+jst_import(article_paths, out_file = "my_second_test", .f = jst_get_article, 
            out_path = tmp)
 
 ## ------------------------------------------------------------------------

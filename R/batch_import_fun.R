@@ -17,7 +17,9 @@
 jstor_convert_to_file <- function(in_paths, chunk_number, out_path, fun,
                                   col_names = FALSE, n_batches,
                                   show_progress = TRUE) {
-  message("Processing chunk ", chunk_number, "/", n_batches)
+  if (n_batches > 1) {
+    message("Processing chunk ", chunk_number, "/", n_batches)
+  }
 
   safe_fun <- purrr::safely(fun)
   
@@ -164,7 +166,7 @@ jstor_convert_to_file <- function(in_paths, chunk_number, out_path, fun,
 #' imports <- jst_define_import(article = c(jst_get_article, jst_get_authors))
 #' 
 #' # convert the files to .csv
-#' jstor_import_zip("my_archive.zip", out_file = "my_out_file", 
+#' jst_import_zip("my_archive.zip", out_file = "my_out_file", 
 #'                  import_spec = imports)
 #' } 
 jst_import <- function(in_paths, out_file, out_path = NULL, .f,

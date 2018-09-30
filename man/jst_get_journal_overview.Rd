@@ -7,7 +7,8 @@
 jst_get_journal_overview(most_recent = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{most_recent}{Should the most recent version be downloaded from DfR?}
+\item{most_recent}{Should the most recent version be downloaded from DfR?
+(Currently disabled due to changes on the JSTOR-servers).}
 
 \item{quiet}{Should status messages about the download be printed?}
 }
@@ -27,9 +28,10 @@ and last (available) issues were published, etc.
 
 The data on journals might change. Therefore this function provides two
 sources of data: a cached version which gets updated with every release, and
-the ability to pull the most recent version directly from DfR.
+the ability to pull the most recent version directly from DfR (this had to
+be temporarily disabled.)
 
-The cached version was updated on 2018-05-15.
+The cached version was updated on 2018-09-27.
 }
 \examples{
 # use the function without arguments to get a tibble from disk
