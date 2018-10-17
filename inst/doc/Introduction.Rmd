@@ -98,7 +98,7 @@ library(knitr)
 The basic usage of the `jst_get_*` functions is very simple. They take only one 
 argument, the path to the file to import:
 ```{r}
-meta_data <- jst_get_article(file_path = jst_example("sample_with_references.xml"))
+meta_data <- jst_get_article(file_path = jst_example("article_with_references.xml"))
 ```
 
 The resulting object is a `tibble` with one row and 17 columns. The columns
@@ -139,7 +139,7 @@ meta_data %>% kable()
 Extracting the authors works in similar fashion:
 
 ```{r, results='asis'}
-authors <- jst_get_authors(jst_example("sample_with_references.xml"))
+authors <- jst_get_authors(jst_example("article_with_references.xml"))
 kable(authors)
 ```
 
@@ -158,34 +158,71 @@ The number of rows matches the number of authors -- each author get its' own row
 
 ## jst_get_references
 ```{r}
-references <- jst_get_references(jst_example("sample_with_references.xml"))
+references <- jst_get_references(jst_example("article_with_references.xml"))
 
-# we need to remove line breaks for knitr::kable() to work properly for printing
-references <- references %>% 
-  mutate(references = stringr::str_remove_all(references, "\\\n"))
+# # we need to remove line breaks for knitr::kable() to work properly for printing
+references <- references %>%
+  mutate(unparsed_refs = stringr::str_remove_all(unparsed_refs, "\\\n"))
 ```
 
 We have two columns:
 
 - *file_name*: Identifier, can be used for matching.
-- *references*: The content of each entry for reference.
+- *ref_title*: The title of the references sections.
+- *authors*: A string of authors. Several authors are separated with `;`.
+- *editors*: A string of editors, if present.
+- *collab*: A field that may contain information on the authors, if authors
+            are not available.
+- *title*: The title of the cited entry.
+- *year*: A year, often the article's publication year, but not always. 
+- *source*: The source of the cited entry. For books often the title of the book,
+            for articles the publisher of the journal.
+- *volume*: The volume of the journal article.
+- *first_page*: The first page of the article/chapter.
+- *last_page*: The last page of the article/chapter.
+- *publisher*: For books the publisher, for articles often missing.
+- *publication_type*: Known types: book, journal, web, other.
+- *unparsed_refs*: The full references entry in unparsed form.
 
-Here I display the first 5 entries for each column:
+
+Here I display 5 random entries:
+
+```{r, echo=FALSE}
+set.seed(1234)
+```
 
 ```{r}
 references %>% 
-  head(5) %>% 
+  sample_n(5) %>% 
   kable()
 ```
 
 This example shows several things: `file_name` is identical among rows, since
-it identifies the article and all references came from one article.
+it identifies the article and all references came from one article. The the
+sample file doesn't follow a typical convention (it was published in 1922), 
+therefore there are several different headings (`ref_title`). Usually, this is
+only "Bibliography" or "References".
 
-The content of references (`references`) is in quite a raw state, quite often
-the result of digitising scans via OCR. Very often, the first entry in this column
-is something like "Bibliography" or "References", which is simply the heading 
-within the article. In the above example there are several headings, because the
-sample file doesn't follow a typical convention (it was published in 1922). 
+Since the references were not parsed by JSTOR, we only get an unparsed version.
+In general, the content of references (`unparsed_refs`) is in quite a raw state, 
+quite often the result of digitising scans via OCR. For example, the last entry 
+reads like this: 
+`MACHADO, A.1911 Zytologische Untersuchungen fiber Trypanosoma rotatorium ...`.
+There is an error here: `fiber` should be `über`. The language of the source
+is German, but the OCR-software assumed English. Therefore, it didn't
+recognize the *Umlaut*. Similar errors are common for text read via OCR.
+
+For other files, we can set `parse_refs = T`, so references will be imported 
+in their parsed form, whenever they are available. 
+
+```{r}
+jst_get_references(
+  jst_example("parsed_references.xml"),
+  parse_refs = T
+) %>% 
+  kable()
+```
+
 
 Note, that there might be other content present like endnotes, in case the
 article used endnotes rather than footnotes.
@@ -193,7 +230,7 @@ article used endnotes rather than footnotes.
 
 ## jst_get_footnotes
 ```{r, results='asis'}
-jst_get_footnotes(jst_example("sample_with_references.xml")) %>% 
+jst_get_footnotes(jst_example("article_with_references.xml")) %>% 
   kable()
 ```
 
@@ -204,7 +241,7 @@ footnotes is returned.
 I will use another file to demonstrate footnotes.
 
 ```{r, results='asis'}
-footnotes <- jst_get_footnotes(jst_example("sample_with_footnotes.xml"))
+footnotes <- jst_get_footnotes(jst_example("article_with_footnotes.xml"))
 
 footnotes %>% 
   mutate(footnotes = stringr::str_remove_all(footnotes, "\\\n")) %>% 
@@ -225,7 +262,7 @@ the whole file and returns a `tibble` with `file_name`, `full_text` and
 I created a file that looks similar to files supplied by DfR with sample text:
 
 ```{r, results='asis'}
-full_text <- jst_get_full_text(jst_example("sample_full_text.txt"))
+full_text <- jst_get_full_text(jst_example("full_text.txt"))
 full_text %>% 
   mutate(full_text = stringr::str_remove_all(full_text, "\\\n")) %>% 
   kable()
@@ -249,7 +286,7 @@ meta_data %>%
 ```{r, results='asis'}
 meta_data %>% 
   left_join(references) %>% 
-  select(file_name, article_title, volume, pub_year, references) %>%
+  select(file_name, article_title, volume, pub_year, unparsed_refs) %>%
   head(5) %>% 
   kable()
 ```
@@ -263,14 +300,14 @@ the books and chapters, jstor supplies `jst_get_book` and `jst_get_chapters`.
 about the complete book:
 
 ```{r, results='asis'}
-jst_get_book(jst_example("sample_book.xml")) %>% knitr::kable()
+jst_get_book(jst_example("book.xml")) %>% knitr::kable()
 ```
 
 A single book might contain many chapters. `jst_get_chapters` extracts all of them.
 Due to this, the function is a bit slower than most of jstor's other functions.
 
 ```{r}
-chapters <- jst_get_chapters(jst_example("sample_book.xml"))
+chapters <- jst_get_chapters(jst_example("book.xml"))
 
 str(chapters)
 ```
@@ -291,7 +328,7 @@ Since extracting all authors for all chapters needs considerably
 more time, by default authors are not extracted. You can import them like so:
 
 ```{r}
-author_chap <- jst_get_chapters(jst_example("sample_book.xml"), authors = TRUE) 
+author_chap <- jst_get_chapters(jst_example("book.xml"), authors = TRUE) 
 ```
 
 The authors are supplied in a list column:

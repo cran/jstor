@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2018-09-30" />
+<meta name="date" content="2018-10-17" />
 
 <title>Introduction to jstor</title>
 
@@ -280,7 +280,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Introduction to jstor</h1>
 <h4 class="author"><em>Thomas Klebel</em></h4>
-<h4 class="date"><em>2018-09-30</em></h4>
+<h4 class="date"><em>2018-10-17</em></h4>
 
 
 <div id="TOC">
@@ -334,7 +334,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="jst_get_article" class="section level2">
 <h2>jst_get_article</h2>
 <p>The basic usage of the <code>jst_get_*</code> functions is very simple. They take only one argument, the path to the file to import:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">meta_data &lt;-<span class="st"> </span><span class="kw">jst_get_article</span>(<span class="dt">file_path =</span> <span class="kw">jst_example</span>(<span class="st">&quot;sample_with_references.xml&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">meta_data &lt;-<span class="st"> </span><span class="kw">jst_get_article</span>(<span class="dt">file_path =</span> <span class="kw">jst_example</span>(<span class="st">&quot;article_with_references.xml&quot;</span>))</a></code></pre></div>
 <p>The resulting object is a <code>tibble</code> with one row and 17 columns. The columns correspond to most of the elements documented here: <a href="http://www.jstor.org/dfr/about/technical-specifications" class="uri">http://www.jstor.org/dfr/about/technical-specifications</a>.</p>
 <p>The columns are:</p>
 <ul>
@@ -384,7 +384,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_with_references</td>
+<td align="left">article_with_references</td>
 <td align="left">NA</td>
 <td align="left">tranamermicrsoci</td>
 <td align="left">NA</td>
@@ -410,7 +410,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="jst_get_authors" class="section level2">
 <h2>jst_get_authors</h2>
 <p>Extracting the authors works in similar fashion:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">authors &lt;-<span class="st"> </span><span class="kw">jst_get_authors</span>(<span class="kw">jst_example</span>(<span class="st">&quot;sample_with_references.xml&quot;</span>))</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">authors &lt;-<span class="st"> </span><span class="kw">jst_get_authors</span>(<span class="kw">jst_example</span>(<span class="st">&quot;article_with_references.xml&quot;</span>))</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">kable</span>(authors)</a></code></pre></div>
 <table>
 <thead>
@@ -426,7 +426,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_with_references</td>
+<td align="left">article_with_references</td>
 <td align="left">NA</td>
 <td align="left">R.</td>
 <td align="left">Kudo</td>
@@ -450,58 +450,276 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="jst_get_references" class="section level2">
 <h2>jst_get_references</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">references &lt;-<span class="st"> </span><span class="kw">jst_get_references</span>(<span class="kw">jst_example</span>(<span class="st">&quot;sample_with_references.xml&quot;</span>))</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">references &lt;-<span class="st"> </span><span class="kw">jst_get_references</span>(<span class="kw">jst_example</span>(<span class="st">&quot;article_with_references.xml&quot;</span>))</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># we need to remove line breaks for knitr::kable() to work properly for printing</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">references &lt;-<span class="st"> </span>references <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">references =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(references, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># # we need to remove line breaks for knitr::kable() to work properly for printing</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">references &lt;-<span class="st"> </span>references <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">unparsed_refs =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(unparsed_refs, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>))</a></code></pre></div>
 <p>We have two columns:</p>
 <ul>
 <li><em>file_name</em>: Identifier, can be used for matching.</li>
-<li><em>references</em>: The content of each entry for reference.</li>
+<li><em>ref_title</em>: The title of the references sections.</li>
+<li><em>authors</em>: A string of authors. Several authors are separated with <code>;</code>.</li>
+<li><em>editors</em>: A string of editors, if present.</li>
+<li><em>collab</em>: A field that may contain information on the authors, if authors are not available.</li>
+<li><em>title</em>: The title of the cited entry.</li>
+<li><em>year</em>: A year, often the article’s publication year, but not always.</li>
+<li><em>source</em>: The source of the cited entry. For books often the title of the book, for articles the publisher of the journal.</li>
+<li><em>volume</em>: The volume of the journal article.</li>
+<li><em>first_page</em>: The first page of the article/chapter.</li>
+<li><em>last_page</em>: The last page of the article/chapter.</li>
+<li><em>publisher</em>: For books the publisher, for articles often missing.</li>
+<li><em>publication_type</em>: Known types: book, journal, web, other.</li>
+<li><em>unparsed_refs</em>: The full references entry in unparsed form.</li>
 </ul>
-<p>Here I display the first 5 entries for each column:</p>
+<p>Here I display 5 random entries:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">references <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">head</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
-<th align="left">references</th>
+<th align="left">ref_title</th>
+<th align="left">authors</th>
+<th align="left">collab</th>
+<th align="left">title</th>
+<th align="left">year</th>
+<th align="left">source</th>
+<th align="left">volume</th>
+<th align="left">first_page</th>
+<th align="left">last_page</th>
+<th align="left">publisher</th>
+<th align="left">publication_type</th>
+<th align="left">unparsed_refs</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_with_references</td>
-<td align="left">Bibliography: Entamoeba ranarumn</td>
-</tr>
-<tr class="even">
-<td align="left">sample_with_references</td>
-<td align="left">DOBELL, C.C.1909 Researches on the intestinal Protozoa of frogs and toads. Quart. Jour. Micros.Sc., 53:201-276, 4 pl. and 1 textfig.</td>
-</tr>
-<tr class="odd">
-<td align="left">sample_with_references</td>
-<td align="left">1918 Are Entamoeba histolytica and Entamoeba ranarum the same species? An experi-mental study. Parasit., 10:294-310.</td>
-</tr>
-<tr class="even">
-<td align="left">sample_with_references</td>
+<td align="left">article_with_references</td>
 <td align="left">References: Leptotheca ohilmacheri</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">KUDO, R.1920 Studies on Myxosporidia. A Synopsis of Genera and Species of Myxosporidia.ill. Biol. Monogr., 5:243-503, 25 pl. and 2 textfig.</td>
+</tr>
+<tr class="even">
+<td align="left">article_with_references</td>
+<td align="left">References: Trypanosomes</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">DUTTON, J. E., J. L. TODD and E. N. TOBEY (see haemogregarines).</td>
 </tr>
 <tr class="odd">
-<td align="left">sample_with_references</td>
-<td align="left">KUDO, R.1920 Studies on Myxosporidia. A Synopsis of Genera and Species of Myxosporidia.ill. Biol. Monogr., 5:243-503, 25 pl. and 2 textfig.</td>
+<td align="left">article_with_references</td>
+<td align="left">References: Trypanosomes</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">DOFLEIN, F.1910 Studien zur Naturgeschichte der Protozoen. VI. Experimentelle Studien fiberdie Trypanosomen des Frosches. Arch. Protist., 19:207-231, 3 pl. and 1textfig.</td>
+</tr>
+<tr class="even">
+<td align="left">article_with_references</td>
+<td align="left">Intestinal flagellates</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">1915a On a new trichomonad flagellate, Trichomitus parvus, from the intestine of Amphi-bians. Uni. Calif. Publi. in Zoology, 16:89-94, 1 pl.</td>
+</tr>
+<tr class="odd">
+<td align="left">article_with_references</td>
+<td align="left">References: Trypanosomes</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">MACHADO, A.1911 Zytologische Untersuchungen fiber Trypanosoma rotatorium Gruby. Mem. Inst.Oswaldo Cruz, 3:108-135, 2 pl.</td>
 </tr>
 </tbody>
 </table>
-<p>This example shows several things: <code>file_name</code> is identical among rows, since it identifies the article and all references came from one article.</p>
-<p>The content of references (<code>references</code>) is in quite a raw state, quite often the result of digitising scans via OCR. Very often, the first entry in this column is something like “Bibliography” or “References”, which is simply the heading within the article. In the above example there are several headings, because the sample file doesn’t follow a typical convention (it was published in 1922).</p>
+<p>This example shows several things: <code>file_name</code> is identical among rows, since it identifies the article and all references came from one article. The the sample file doesn’t follow a typical convention (it was published in 1922), therefore there are several different headings (<code>ref_title</code>). Usually, this is only “Bibliography” or “References”.</p>
+<p>Since the references were not parsed by JSTOR, we only get an unparsed version. In general, the content of references (<code>unparsed_refs</code>) is in quite a raw state, quite often the result of digitising scans via OCR. For example, the last entry reads like this: <code>MACHADO, A.1911 Zytologische Untersuchungen fiber Trypanosoma rotatorium ...</code>. There is an error here: <code>fiber</code> should be <code>über</code>. The language of the source is German, but the OCR-software assumed English. Therefore, it didn’t recognize the <em>Umlaut</em>. Similar errors are common for text read via OCR.</p>
+<p>For other files, we can set <code>parse_refs = T</code>, so references will be imported in their parsed form, whenever they are available.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">jst_get_references</span>(</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="kw">jst_example</span>(<span class="st">&quot;parsed_references.xml&quot;</span>),</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="dt">parse_refs =</span> T</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">file_name</th>
+<th align="left">ref_title</th>
+<th align="left">authors</th>
+<th align="left">editors</th>
+<th align="left">collab</th>
+<th align="left">title</th>
+<th align="left">year</th>
+<th align="left">source</th>
+<th align="left">volume</th>
+<th align="left">first_page</th>
+<th align="left">last_page</th>
+<th align="left">publisher</th>
+<th align="left">publication_type</th>
+<th align="left">unparsed_refs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">parsed_references</td>
+<td align="left">Notes</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">2005</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">other</td>
+<td align="left">1. The USA PATRIOT Act expanded the government’s surveillance power in numerous other ways (see, e.g. Keenan 2005 ).</td>
+</tr>
+<tr class="even">
+<td align="left">parsed_references</td>
+<td align="left">References</td>
+<td align="left">Acohido, B.; Eisler, P.</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">“Snowden Case: How Low-Level Insider Could Steal from NSA”</td>
+<td align="left">2013</td>
+<td align="left">USA Today</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">other</td>
+<td align="left">Acohido, B. and Eisler, P. ( 2013 ) “Snowden Case: How Low-Level Insider Could Steal from NSA” , USA Today , 12 June. Available online at <a href="http://www.google.com" class="uri">http://www.google.com</a> (accessed 15 June 2013).</td>
+</tr>
+<tr class="odd">
+<td align="left">parsed_references</td>
+<td align="left">References</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">Amnesty International</td>
+<td align="left">NA</td>
+<td align="left">2013</td>
+<td align="left">“USA: Revelations about Government Surveillance ‘raise red flags’”</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">other</td>
+<td align="left">Amnesty International ( 2013 ) “USA: Revelations about Government Surveillance ‘raise red flags’” , 7 June. Available online at <a href="http://www.google.com" class="uri">http://www.google.com</a> (accessed 14 June 2013).</td>
+</tr>
+<tr class="even">
+<td align="left">parsed_references</td>
+<td align="left">References</td>
+<td align="left">Jacobson, D.</td>
+<td align="left">D. E. Davis; J. Go</td>
+<td align="left">NA</td>
+<td align="left">Chapter title</td>
+<td align="left">2009</td>
+<td align="left">Book title</td>
+<td align="left">NA</td>
+<td align="left">281</td>
+<td align="left">286</td>
+<td align="left">Routledge</td>
+<td align="left">book</td>
+<td align="left">Jacobson, D. , 2009 . Chapter title . In: D. E. Davis &amp; J. Go , eds. Book title .: Routledge , pp. 281 - 286 .</td>
+</tr>
+<tr class="odd">
+<td align="left">parsed_references</td>
+<td align="left">References</td>
+<td align="left">Costall, Alan</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">“Some article title”</td>
+<td align="left">1980</td>
+<td align="left">Theory and Psychology</td>
+<td align="left">1</td>
+<td align="left">123</td>
+<td align="left">145</td>
+<td align="left">NA</td>
+<td align="left">journal</td>
+<td align="left">Costall, Alan ( 1980 ). “Some article title” Theory and Psychology 1 : 123 – 145 .</td>
+</tr>
+<tr class="even">
+<td align="left">parsed_references</td>
+<td align="left">References</td>
+<td align="left">Hudson, W.</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">Another article title</td>
+<td align="left">2000</td>
+<td align="left">Australian Journal of Cats &amp; Dogs</td>
+<td align="left">40</td>
+<td align="left">134</td>
+<td align="left">150</td>
+<td align="left">NA</td>
+<td align="left">journal</td>
+<td align="left">Hudson, W. , 2000 . Another article title . Australian Journal of Cats &amp; Dogs , September , 40 ( 3 ), p. 134 – 150 .</td>
+</tr>
+<tr class="odd">
+<td align="left">parsed_references</td>
+<td align="left">References</td>
+<td align="left">Fries-Britt, S.; Griffin, K.A.</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">Some article about race</td>
+<td align="left">2000</td>
+<td align="left">Journal of College Student Fun</td>
+<td align="left">20</td>
+<td align="left">60</td>
+<td align="left">120</td>
+<td align="left">NA</td>
+<td align="left">journal</td>
+<td align="left">Fries-Britt S. , &amp; Griffin K.A. ( 2000 ). Some article about race . Journal of College Student Fun , 20 , 60 – 120 .</td>
+</tr>
+</tbody>
+</table>
 <p>Note, that there might be other content present like endnotes, in case the article used endnotes rather than footnotes.</p>
 </div>
 <div id="jst_get_footnotes" class="section level2">
 <h2>jst_get_footnotes</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">jst_get_footnotes</span>(<span class="kw">jst_example</span>(<span class="st">&quot;sample_with_references.xml&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">jst_get_footnotes</span>(<span class="kw">jst_example</span>(<span class="st">&quot;article_with_references.xml&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -511,18 +729,18 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_with_references</td>
+<td align="left">article_with_references</td>
 <td align="left">NA</td>
 </tr>
 </tbody>
 </table>
 <p>Very commonly, articles either have footnotes or references. The sample file used here does not have footnotes, therefore a simple <code>tibble</code> with missing footnotes is returned.</p>
 <p>I will use another file to demonstrate footnotes.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">footnotes &lt;-<span class="st"> </span><span class="kw">jst_get_footnotes</span>(<span class="kw">jst_example</span>(<span class="st">&quot;sample_with_footnotes.xml&quot;</span>))</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">footnotes <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">footnotes =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(footnotes, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">footnotes &lt;-<span class="st"> </span><span class="kw">jst_get_footnotes</span>(<span class="kw">jst_example</span>(<span class="st">&quot;article_with_footnotes.xml&quot;</span>))</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">footnotes <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">footnotes =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(footnotes, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -532,31 +750,31 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_with_footnotes</td>
+<td align="left">article_with_footnotes</td>
 <td align="left">[Footnotes]</td>
 </tr>
 <tr class="even">
-<td align="left">sample_with_footnotes</td>
+<td align="left">article_with_footnotes</td>
 <td align="left">9Quarterly, vol. XIII, no. 1,entries for April 19 and 21.</td>
 </tr>
 <tr class="odd">
-<td align="left">sample_with_footnotes</td>
+<td align="left">article_with_footnotes</td>
 <td align="left">10Quarterly, vol. XIII,no. 1, p. 8.</td>
 </tr>
 <tr class="even">
-<td align="left">sample_with_footnotes</td>
+<td align="left">article_with_footnotes</td>
 <td align="left">14Quarterly, vol. VIII, no. 1.Olympia Columbian, Sept. 11, 1852,</td>
 </tr>
 <tr class="odd">
-<td align="left">sample_with_footnotes</td>
+<td align="left">article_with_footnotes</td>
 <td align="left">26Quarterly, vol. XII,no. 2, p. 141.</td>
 </tr>
 <tr class="even">
-<td align="left">sample_with_footnotes</td>
+<td align="left">article_with_footnotes</td>
 <td align="left">32Dr. David S. Maynard, later (March 31, 1852)</td>
 </tr>
 <tr class="odd">
-<td align="left">sample_with_footnotes</td>
+<td align="left">article_with_footnotes</td>
 <td align="left">34Thomas Linklater, Shepherd, since October 6, 1849,</td>
 </tr>
 </tbody>
@@ -567,10 +785,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2>jst_get_full_text</h2>
 <p>The function to extract full texts can’t be demonstrated with proper data, since the full texts are only supplied upon special request with DfR. The function guesses the encoding of the specified file via <code>readr::guess_encoding()</code>, reads the whole file and returns a <code>tibble</code> with <code>file_name</code>, <code>full_text</code> and <code>encoding</code>.</p>
 <p>I created a file that looks similar to files supplied by DfR with sample text:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">full_text &lt;-<span class="st"> </span><span class="kw">jst_get_full_text</span>(<span class="kw">jst_example</span>(<span class="st">&quot;sample_full_text.txt&quot;</span>))</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">full_text <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">full_text =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(full_text, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">full_text &lt;-<span class="st"> </span><span class="kw">jst_get_full_text</span>(<span class="kw">jst_example</span>(<span class="st">&quot;full_text.txt&quot;</span>))</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">full_text <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">full_text =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(full_text, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -581,7 +799,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_full_text</td>
+<td align="left">full_text</td>
 <td align="left"><plain_text> <page sequence="1">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laborisnisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sintobcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit animid est laborum.</page> </plain_text></td>
 <td align="left">ASCII</td>
 </tr>
@@ -593,11 +811,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>Different parts of meta-data can be combined by using <code>dplyr::left_join()</code>.</p>
 <div id="matching-with-authors" class="section level3">
 <h3>Matching with authors</h3>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">meta_data <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">left_join</span>(authors) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(file_name, article_title, pub_year, given_name, surname) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="st">  </span><span class="kw">kable</span>()</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; Joining, by = &quot;file_name&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">meta_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">left_join</span>(authors) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(file_name, article_title, pub_year, given_name, surname) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">kable</span>()</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; Joining, by = &quot;file_name&quot;</span></a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -610,7 +828,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_with_references</td>
+<td align="left">article_with_references</td>
 <td align="left">On the Protozoa Parasitic in Frogs</td>
 <td align="right">1922</td>
 <td align="left">R.</td>
@@ -621,12 +839,12 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="matching-with-references" class="section level3">
 <h3>Matching with references</h3>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">meta_data <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">left_join</span>(references) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(file_name, article_title, volume, pub_year, references) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">head</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; Joining, by = &quot;file_name&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">meta_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">left_join</span>(references) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(file_name, article_title, volume, pub_year, unparsed_refs) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">  </span><span class="kw">head</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; Joining, by = c(&quot;file_name&quot;, &quot;volume&quot;, &quot;first_page&quot;, &quot;last_page&quot;)</span></a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -634,44 +852,16 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <th align="left">article_title</th>
 <th align="left">volume</th>
 <th align="right">pub_year</th>
-<th align="left">references</th>
+<th align="left">unparsed_refs</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_with_references</td>
+<td align="left">article_with_references</td>
 <td align="left">On the Protozoa Parasitic in Frogs</td>
 <td align="left">41</td>
 <td align="right">1922</td>
-<td align="left">Bibliography: Entamoeba ranarumn</td>
-</tr>
-<tr class="even">
-<td align="left">sample_with_references</td>
-<td align="left">On the Protozoa Parasitic in Frogs</td>
-<td align="left">41</td>
-<td align="right">1922</td>
-<td align="left">DOBELL, C.C.1909 Researches on the intestinal Protozoa of frogs and toads. Quart. Jour. Micros.Sc., 53:201-276, 4 pl. and 1 textfig.</td>
-</tr>
-<tr class="odd">
-<td align="left">sample_with_references</td>
-<td align="left">On the Protozoa Parasitic in Frogs</td>
-<td align="left">41</td>
-<td align="right">1922</td>
-<td align="left">1918 Are Entamoeba histolytica and Entamoeba ranarum the same species? An experi-mental study. Parasit., 10:294-310.</td>
-</tr>
-<tr class="even">
-<td align="left">sample_with_references</td>
-<td align="left">On the Protozoa Parasitic in Frogs</td>
-<td align="left">41</td>
-<td align="right">1922</td>
-<td align="left">References: Leptotheca ohilmacheri</td>
-</tr>
-<tr class="odd">
-<td align="left">sample_with_references</td>
-<td align="left">On the Protozoa Parasitic in Frogs</td>
-<td align="left">41</td>
-<td align="right">1922</td>
-<td align="left">KUDO, R.1920 Studies on Myxosporidia. A Synopsis of Genera and Species of Myxosporidia.ill. Biol. Monogr., 5:243-503, 25 pl. and 2 textfig.</td>
+<td align="left">NA</td>
 </tr>
 </tbody>
 </table>
@@ -682,7 +872,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h1>Books</h1>
 <p>Quite recently DfR added book chapters to their stack. To import metadata about the books and chapters, jstor supplies <code>jst_get_book</code> and <code>jst_get_chapters</code>.</p>
 <p><code>jst_get_book</code> is very similar to <code>jst_get_article</code>. We obtain general information about the complete book:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">jst_get_book</span>(<span class="kw">jst_example</span>(<span class="st">&quot;sample_book.xml&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">jst_get_book</span>(<span class="kw">jst_example</span>(<span class="st">&quot;book.xml&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -704,7 +894,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <tbody>
 <tr class="odd">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">Political Science</td>
 <td align="left">The 2006 Military Takeover in Fiji</td>
 <td align="left">A Coup to End All Coups?</td>
@@ -720,24 +910,24 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>A single book might contain many chapters. <code>jst_get_chapters</code> extracts all of them. Due to this, the function is a bit slower than most of jstor’s other functions.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">chapters &lt;-<span class="st"> </span><span class="kw">jst_get_chapters</span>(<span class="kw">jst_example</span>(<span class="st">&quot;sample_book.xml&quot;</span>))</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw">str</span>(chapters)</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt; Classes 'tbl_df', 'tbl' and 'data.frame':    36 obs. of  9 variables:</span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt;  $ book_id        : chr  &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; ...</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt;  $ file_name      : chr  &quot;sample_book&quot; &quot;sample_book&quot; &quot;sample_book&quot; &quot;sample_book&quot; ...</span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;  $ part_id        : chr  &quot;j.ctt24hdz7.1&quot; &quot;j.ctt24hdz7.2&quot; &quot;j.ctt24hdz7.3&quot; &quot;j.ctt24hdz7.4&quot; ...</span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt;  $ part_label     : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt;  $ part_title     : chr  &quot;Front Matter&quot; &quot;Table of Contents&quot; &quot;Acronyms and abbreviations&quot; &quot;Authors’ biographies&quot; ...</span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt;  $ part_subtitle  : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt;  $ authors        : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#&gt;  $ abstract       : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co">#&gt;  $ part_first_page: chr  &quot;i&quot; &quot;v&quot; &quot;vii&quot; &quot;xi&quot; ...</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">chapters &lt;-<span class="st"> </span><span class="kw">jst_get_chapters</span>(<span class="kw">jst_example</span>(<span class="st">&quot;book.xml&quot;</span>))</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">str</span>(chapters)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Classes 'tbl_df', 'tbl' and 'data.frame':    36 obs. of  9 variables:</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;  $ book_id        : chr  &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; ...</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;  $ file_name      : chr  &quot;book&quot; &quot;book&quot; &quot;book&quot; &quot;book&quot; ...</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;  $ part_id        : chr  &quot;j.ctt24hdz7.1&quot; &quot;j.ctt24hdz7.2&quot; &quot;j.ctt24hdz7.3&quot; &quot;j.ctt24hdz7.4&quot; ...</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;  $ part_label     : chr  NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;  $ part_title     : chr  &quot;Front Matter&quot; &quot;Table of Contents&quot; &quot;Acronyms and abbreviations&quot; &quot;Authors’ biographies&quot; ...</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt;  $ part_subtitle  : chr  NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;  $ authors        : chr  NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;  $ abstract       : chr  NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt;  $ part_first_page: chr  &quot;i&quot; &quot;v&quot; &quot;vii&quot; &quot;xi&quot; ...</span></a></code></pre></div>
 <p>Without the abstracts (they are rather long) the first 10 chapters look like this:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">chapters <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>abstract) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span><span class="kw">head</span>(<span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">chapters <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>abstract) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw">head</span>(<span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -754,7 +944,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <tbody>
 <tr class="odd">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.1</td>
 <td align="left">NA</td>
 <td align="left">Front Matter</td>
@@ -764,7 +954,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 <tr class="even">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.2</td>
 <td align="left">NA</td>
 <td align="left">Table of Contents</td>
@@ -774,7 +964,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 <tr class="odd">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.3</td>
 <td align="left">NA</td>
 <td align="left">Acronyms and abbreviations</td>
@@ -784,7 +974,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 <tr class="even">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.4</td>
 <td align="left">NA</td>
 <td align="left">Authors’ biographies</td>
@@ -794,7 +984,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 <tr class="odd">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.5</td>
 <td align="left">1.</td>
 <td align="left">The enigmas of Fiji’s good governance coup</td>
@@ -804,7 +994,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 <tr class="even">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.6</td>
 <td align="left">2.</td>
 <td align="left">‘Anxiety, uncertainty and fear in our land’:</td>
@@ -814,7 +1004,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 <tr class="odd">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.7</td>
 <td align="left">3.</td>
 <td align="left">Fiji’s December 2006 coup:</td>
@@ -824,7 +1014,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 <tr class="even">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.8</td>
 <td align="left">4.</td>
 <td align="left">‘This process of political readjustment’:</td>
@@ -834,7 +1024,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 <tr class="odd">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.9</td>
 <td align="left">5.</td>
 <td align="left">The changing role of the Great Council of Chiefs</td>
@@ -844,7 +1034,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 <tr class="even">
 <td align="left">j.ctt24hdz7</td>
-<td align="left">sample_book</td>
+<td align="left">book</td>
 <td align="left">j.ctt24hdz7.10</td>
 <td align="left">6.</td>
 <td align="left">The Fiji military and ethno-nationalism:</td>
@@ -855,16 +1045,16 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>Since extracting all authors for all chapters needs considerably more time, by default authors are not extracted. You can import them like so:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">author_chap &lt;-<span class="st"> </span><span class="kw">jst_get_chapters</span>(<span class="kw">jst_example</span>(<span class="st">&quot;sample_book.xml&quot;</span>), <span class="dt">authors =</span> <span class="ot">TRUE</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">author_chap &lt;-<span class="st"> </span><span class="kw">jst_get_chapters</span>(<span class="kw">jst_example</span>(<span class="st">&quot;book.xml&quot;</span>), <span class="dt">authors =</span> <span class="ot">TRUE</span>) </a></code></pre></div>
 <p>The authors are supplied in a list column:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">class</span>(author_chap<span class="op">$</span>authors)</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#&gt; [1] &quot;list&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">class</span>(author_chap<span class="op">$</span>authors)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#&gt; [1] &quot;list&quot;</span></a></code></pre></div>
 <p>You can expand this list with <code>tidyr::unnest</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">author_chap <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(part_id, given_name, surname) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="st">  </span><span class="kw">head</span>(<span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">author_chap <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(part_id, given_name, surname) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="st">  </span><span class="kw">head</span>(<span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">

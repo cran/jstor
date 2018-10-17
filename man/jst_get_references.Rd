@@ -4,17 +4,34 @@
 \alias{jst_get_references}
 \title{Extract all references}
 \usage{
-jst_get_references(file_path)
+jst_get_references(file_path, parse_refs = F)
 }
 \arguments{
 \item{file_path}{The path to the \code{.xml}-file from which references should be
 extracted.}
+
+\item{parse_refs}{Should references be parsed, if available?}
 }
 \value{
-A \code{tibble} with three two containing the references:
+A \code{tibble} with the following columns:
 \itemize{
-\item \code{basename_id}: the identifier for the article the references come from.
-\item \code{references}: the text of the references.
+\item \code{file_name}: the identifier for the article the references come from.
+\item \code{ref_title}: the title of the references sections.
+\item \code{authors}: a string of authors. Several authors are separated with \code{;}.
+\item \code{editors}: a string of editors, if available.
+\item \code{collab}: a field that may contain information on the authors, if authors
+are not available.
+\item \code{title}: the title of the cited entry. For books this is often empty, with
+the title being in \code{source}.
+\item \code{year}: a year, often the article's publication year, but not always.
+\item \code{source}: the source of the cited entry. For books often the title of the
+book, for articles the publisher of the journal.
+\item \code{volume}: the volume of the journal article.
+\item \code{first_page}: the first page of the article/chapter.
+\item \code{last_page}: the last page of the article/chapter.
+\item \code{publisher}: For books the publisher, for articles often missing.
+\item \code{publication_type}: Known types: \code{book}, \code{journal}, \code{web}, \code{other}.
+\item \code{unparsed_refs}: The full references entry in unparsed form.
 }
 }
 \description{
@@ -37,5 +54,11 @@ In general, the implementation is not as fast as \code{jst_get_article()} -
 articles with many references slow the process down.
 }
 \examples{
-jst_get_references(jst_example("sample_with_references.xml"))
+jst_get_references(jst_example("article_with_references.xml"))
+
+# import parsed references
+jst_get_references(
+  jst_example("parsed_references.xml"),
+  parse_refs = TRUE
+) 
 }

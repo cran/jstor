@@ -15,6 +15,7 @@ test_that("jst_define_import validates input", {
   expect_silent(jst_define_import(article = c(jst_get_article, jst_get_authors)))
   
   expect_error(jst_define_import(article = jst_get_book))
+  expect_error(jst_define_import(book = jst_get_article))
   expect_error(jst_define_import(article = c(jst_get_article, jst_get_book),
                                  pamphlet = jst_get_article))
   
@@ -57,6 +58,17 @@ test_that("jst_define_imports gives correct results", {
   
 })
 
-
-
-
+test_that("import-spec print method works", {
+  skip("This test is stupid, should be improved. It depends on the console width
+       which is not a good idea.")
+  out <- jst_define_import(article = c(jst_get_article, jst_get_references),
+                           pamphlet = jst_get_article,
+                           book = jst_get_book,
+                           report = jst_get_book)
+  
+  out_lines <- capture.output(print(out))
+  
+  expect_identical(out_lines, 
+                   readr::read_lines("testfiles/import_spec_print.txt"))
+  
+})

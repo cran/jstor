@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2018-09-30" />
+<meta name="date" content="2018-10-17" />
 
 <title>Known Quirks of JSTOR/DfR Data</title>
 
@@ -280,7 +280,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Known Quirks of JSTOR/DfR Data</h1>
 <h4 class="author"><em>Thomas Klebel</em></h4>
-<h4 class="date"><em>2018-09-30</em></h4>
+<h4 class="date"><em>2018-10-17</em></h4>
 
 
 <div id="TOC">
@@ -397,7 +397,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li><code>journal_jcode</code></li>
 <li><code>journal_pub_id</code></li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">sample_article &lt;-<span class="st"> </span><span class="kw">jst_get_article</span>(<span class="kw">jst_example</span>(<span class="st">&quot;sample_with_references.xml&quot;</span>)) </a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">sample_article &lt;-<span class="st"> </span><span class="kw">jst_get_article</span>(<span class="kw">jst_example</span>(<span class="st">&quot;article_with_references.xml&quot;</span>)) </a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">knitr<span class="op">::</span><span class="kw">kable</span>(sample_article)</a></code></pre></div>
 <table>
@@ -426,7 +426,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_with_references</td>
+<td align="left">article_with_references</td>
 <td align="left">NA</td>
 <td align="left">tranamermicrsoci</td>
 <td align="left">NA</td>
@@ -466,7 +466,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <tbody>
 <tr class="odd">
 <td align="left">file_name</td>
-<td align="left">sample_with_references</td>
+<td align="left">article_with_references</td>
 </tr>
 <tr class="even">
 <td align="left">journal_title</td>

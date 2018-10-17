@@ -38,7 +38,7 @@
 #' tmp <- tempdir()
 #' 
 #' # find multiple files
-#' file_list <- rep(jst_example("sample_with_references.xml"), 2)
+#' file_list <- rep(jst_example("article_with_references.xml"), 2)
 #'
 #' # convert and write to file
 #' jst_import(file_list, "article", out_path = tmp, .f = jst_get_article,
@@ -103,17 +103,17 @@ jst_combine_outputs <- function(path, write_to_file = TRUE,
     write_csv(x, path = path)
   }
   
-  re_imported <- purrr::map(splitted_paths, reader)
-  
+
   if (write_to_file) {
+    # create out-path
     if (is.null(out_path)) {
       out_path <- file.path(path, paste0("combined_",
-                                          basename(names(splitted_paths)),
-                                          ".csv"))
+                                         basename(names(splitted_paths)),
+                                         ".csv"))
     } else {
       out_path <- file.path(out_path, paste0("combined_",
-                                              basename(names(splitted_paths)), 
-                                              ".csv"))
+                                             basename(names(splitted_paths)), 
+                                             ".csv"))
     }
     
     if (any(file.exists(out_path)) && !overwrite) {
@@ -122,9 +122,11 @@ jst_combine_outputs <- function(path, write_to_file = TRUE,
                    " `overwrite = TRUE`?"))
     }
     
+    re_imported <- purrr::map(splitted_paths, reader)
+    
     purrr::walk2(re_imported, out_path, writer)
   } else {
-    return(re_imported)
+    return(purrr::map(splitted_paths, reader))
   }
 
   if (clean_up) {
@@ -175,7 +177,9 @@ jst_re_import <- function(file, warn = TRUE) {
     chapter_w_authors = names(chapter_w_authors$cols),
     footnotes = names(footnote_cols$cols),
     references = names(reference_cols$cols),
-    ngram = names(ngram_cols$cols)
+    references_old = names(reference_cols_old$cols),
+    ngram = names(ngram_cols$cols),
+    error = names(error_cols$cols)
   ) %>% 
     purrr::map_lgl(identical, sample_row)
   
@@ -189,7 +193,9 @@ jst_re_import <- function(file, warn = TRUE) {
            chapter_w_authors = read_csv(file, col_types = chapter_w_authors),
            footnotes = read_csv(file, col_types = footnote_cols),
            references = read_csv(file, col_types = reference_cols),
-           ngram = read_csv(file, col_types = ngram_cols))
+           references_old = read_csv(file, col_types = reference_cols_old),
+           ngram = read_csv(file, col_types = ngram_cols),
+           error = read_csv(file, col_types = error_cols))
   } else {
     # match by column length
     matches <- c(
@@ -199,7 +205,8 @@ jst_re_import <- function(file, warn = TRUE) {
       book = 13L,
       chapter = 9L,
       chapter_w_authors = 15L,
-      ngram = 3L
+      ngram = 3L,
+      references  = 14L
     ) %>% 
       purrr::map_lgl(identical, length(sample_row))
     
@@ -220,15 +227,21 @@ jst_re_import <- function(file, warn = TRUE) {
                col_names = names(chapter_w_authors$cols)
              ),
              ngram = read_csv(file, col_types = ngram_cols,
-                              col_names = names(ngram_cols$cols)))
+                              col_names = names(ngram_cols$cols)),
+             references = read_csv(file, col_types = reference_cols,
+                                   col_names = names(reference_cols$cols)))
     } else {
       # try to guess which type our source file is.
       # only looking at the first row might lead to errors, but there is only so
       # much we can do to try guessing the type.
-      if (any(str_detect(sample_row, "Referen.*|Biblio.*|Endnote.*"))) {
-        read_csv(file, col_types = reference_cols,
-                 col_names = names(reference_cols$cols))
-      } else if (any(str_detect(sample_row, "Footnote.*"))) {
+      if (any(str_detect(stringr::str_to_lower(sample_row),
+                         "referen.*|biblio.*|endnote.*"))) {
+        # we can be sure here, that we have the old format for references, since
+        # the new format has 8 columns
+        read_csv(file, col_types = reference_cols_old,
+                 col_names = names(reference_cols_old$cols))
+      } else if (any(str_detect(stringr::str_to_lower(sample_row),
+                                         "footnote.*"))) {
         read_csv(file, col_types = footnote_cols,
                  col_names = names(footnote_cols$cols))
       } else {
@@ -346,13 +359,34 @@ footnote_cols <- cols(
   file_name = col_character(),
   footnotes = col_character()
 )
-reference_cols <- cols(
+reference_cols_old <- cols(
   file_name = col_character(),
   references = col_character()
+)
+reference_cols <- cols(
+  file_name = col_character(),
+  ref_title = col_character(),
+  authors = col_character(), 
+  editors = col_character(),
+  collab = col_character(),
+  title = col_character(),
+  year = col_character(),
+  source = col_character(),
+  volume = col_character(),
+  first_page = col_character(),
+  last_page = col_character(),
+  publisher = col_character(),
+  publication_type = col_character(),
+  unparsed_refs = col_character()
 )
 
 ngram_cols <- cols(
   file_name = col_character(),
   ngram = col_character(),
   n = col_integer()
+)
+
+error_cols <- cols(
+  id = col_integer(),
+  error_message = col_character()
 )

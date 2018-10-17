@@ -28,7 +28,7 @@ input %>%
   jst_add_total_pages()
 
 ## ---- results='asis'-----------------------------------------------------
-sample_article <- jst_get_article(jst_example("sample_with_references.xml")) 
+sample_article <- jst_get_article(jst_example("article_with_references.xml")) 
 
 knitr::kable(sample_article)
 

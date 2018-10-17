@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2018-09-30" />
+<meta name="date" content="2018-10-17" />
 
 <title>Automating File Import</title>
 
@@ -280,7 +280,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Automating File Import</h1>
 <h4 class="author"><em>Thomas Klebel</em></h4>
-<h4 class="date"><em>2018-09-30</em></h4>
+<h4 class="date"><em>2018-10-17</em></h4>
 
 
 
@@ -440,9 +440,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2><code>list.files</code></h2>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">file_names_listed &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path =</span> example_dir, <span class="dt">full.names =</span> T, <span class="dt">pattern =</span> <span class="st">&quot;*.xml&quot;</span>)</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">file_names_listed</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/Rtmp129xvO/Rinst7f677f60b7de/jstor/extdata/sample_book.xml&quot;           </span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; [2] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/Rtmp129xvO/Rinst7f677f60b7de/jstor/extdata/sample_with_footnotes.xml&quot; </span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [3] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/Rtmp129xvO/Rinst7f677f60b7de/jstor/extdata/sample_with_references.xml&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpxrfTjj/Rinst320d38743169/jstor/extdata/article_with_footnotes.xml&quot; </span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; [2] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpxrfTjj/Rinst320d38743169/jstor/extdata/article_with_references.xml&quot;</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [3] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpxrfTjj/Rinst320d38743169/jstor/extdata/book.xml&quot;                   </span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; [4] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpxrfTjj/Rinst320d38743169/jstor/extdata/parsed_references.xml&quot;</span></a></code></pre></div>
 <div id="system-and-find" class="section level3">
 <h3><code>system</code> and <code>find</code></h3>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">file_names &lt;-<span class="st"> </span><span class="kw">system</span>(<span class="kw">paste0</span>(<span class="st">&quot;cd &quot;</span>, example_dir, <span class="st">&quot;; find . -name '*.xml' -type f&quot;</span>), <span class="dt">intern =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
@@ -495,7 +496,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">sample_with_footnotes</td>
+<td align="left">article_with_footnotes</td>
 <td align="left">NA</td>
 <td align="left">washhistq</td>
 <td align="left">NA</td>
@@ -516,7 +517,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <td align="left">NA</td>
 </tr>
 <tr class="even">
-<td align="left">sample_with_references</td>
+<td align="left">article_with_references</td>
 <td align="left">NA</td>
 <td align="left">tranamermicrsoci</td>
 <td align="left">NA</td>
@@ -542,7 +543,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">jst_import</span>(article_paths, <span class="dt">out_file =</span> <span class="st">&quot;my_second_test&quot;</span>, <span class="dt">.f =</span> jst_get_article, </a>
 <a class="sourceLine" id="cb14-2" data-line-number="2">           <span class="dt">out_path =</span> tmp)</a>
 <a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; Starting to import 2 file(s).</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Finished importing 2 file(s) in 0.08 secs.</span></a></code></pre></div>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Finished importing 2 file(s) in 0.06 secs.</span></a></code></pre></div>
 <p>The result is again written to disk, as can be seen below:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">list.files</span>(tmp, <span class="dt">pattern =</span> <span class="st">&quot;csv&quot;</span>)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt; [1] &quot;my_second_test-1.csv&quot;                         </span></a>

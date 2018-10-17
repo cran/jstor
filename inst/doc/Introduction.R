@@ -10,33 +10,43 @@ library(dplyr)
 library(knitr)
 
 ## ------------------------------------------------------------------------
-meta_data <- jst_get_article(file_path = jst_example("sample_with_references.xml"))
+meta_data <- jst_get_article(file_path = jst_example("article_with_references.xml"))
 
 ## ---- results='asis'-----------------------------------------------------
 meta_data %>% kable()
 
 ## ---- results='asis'-----------------------------------------------------
-authors <- jst_get_authors(jst_example("sample_with_references.xml"))
+authors <- jst_get_authors(jst_example("article_with_references.xml"))
 kable(authors)
 
 ## ------------------------------------------------------------------------
-references <- jst_get_references(jst_example("sample_with_references.xml"))
+references <- jst_get_references(jst_example("article_with_references.xml"))
 
-# we need to remove line breaks for knitr::kable() to work properly for printing
-references <- references %>% 
-  mutate(references = stringr::str_remove_all(references, "\\\n"))
+# # we need to remove line breaks for knitr::kable() to work properly for printing
+references <- references %>%
+  mutate(unparsed_refs = stringr::str_remove_all(unparsed_refs, "\\\n"))
+
+## ---- echo=FALSE---------------------------------------------------------
+set.seed(1234)
 
 ## ------------------------------------------------------------------------
 references %>% 
-  head(5) %>% 
+  sample_n(5) %>% 
+  kable()
+
+## ------------------------------------------------------------------------
+jst_get_references(
+  jst_example("parsed_references.xml"),
+  parse_refs = T
+) %>% 
   kable()
 
 ## ---- results='asis'-----------------------------------------------------
-jst_get_footnotes(jst_example("sample_with_references.xml")) %>% 
+jst_get_footnotes(jst_example("article_with_references.xml")) %>% 
   kable()
 
 ## ---- results='asis'-----------------------------------------------------
-footnotes <- jst_get_footnotes(jst_example("sample_with_footnotes.xml"))
+footnotes <- jst_get_footnotes(jst_example("article_with_footnotes.xml"))
 
 footnotes %>% 
   mutate(footnotes = stringr::str_remove_all(footnotes, "\\\n")) %>% 
@@ -44,7 +54,7 @@ footnotes %>%
 
 
 ## ---- results='asis'-----------------------------------------------------
-full_text <- jst_get_full_text(jst_example("sample_full_text.txt"))
+full_text <- jst_get_full_text(jst_example("full_text.txt"))
 full_text %>% 
   mutate(full_text = stringr::str_remove_all(full_text, "\\\n")) %>% 
   kable()
@@ -58,15 +68,15 @@ meta_data %>%
 ## ---- results='asis'-----------------------------------------------------
 meta_data %>% 
   left_join(references) %>% 
-  select(file_name, article_title, volume, pub_year, references) %>%
+  select(file_name, article_title, volume, pub_year, unparsed_refs) %>%
   head(5) %>% 
   kable()
 
 ## ---- results='asis'-----------------------------------------------------
-jst_get_book(jst_example("sample_book.xml")) %>% knitr::kable()
+jst_get_book(jst_example("book.xml")) %>% knitr::kable()
 
 ## ------------------------------------------------------------------------
-chapters <- jst_get_chapters(jst_example("sample_book.xml"))
+chapters <- jst_get_chapters(jst_example("book.xml"))
 
 str(chapters)
 
@@ -77,7 +87,7 @@ chapters %>%
   kable()
 
 ## ------------------------------------------------------------------------
-author_chap <- jst_get_chapters(jst_example("sample_book.xml"), authors = TRUE) 
+author_chap <- jst_get_chapters(jst_example("book.xml"), authors = TRUE) 
 
 ## ------------------------------------------------------------------------
 class(author_chap$authors)
