@@ -24,7 +24,7 @@ references <- jst_get_references(jst_example("article_with_references.xml"))
 
 # # we need to remove line breaks for knitr::kable() to work properly for printing
 references <- references %>%
-  mutate(unparsed_refs = stringr::str_remove_all(unparsed_refs, "\\\n"))
+  mutate(ref_unparsed = stringr::str_remove_all(ref_unparsed, "\\\n"))
 
 ## ---- echo=FALSE---------------------------------------------------------
 set.seed(1234)
@@ -68,7 +68,7 @@ meta_data %>%
 ## ---- results='asis'-----------------------------------------------------
 meta_data %>% 
   left_join(references) %>% 
-  select(file_name, article_title, volume, pub_year, unparsed_refs) %>%
+  select(file_name, article_title, volume, pub_year, ref_unparsed) %>%
   head(5) %>% 
   kable()
 

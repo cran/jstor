@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2018-10-17" />
+<meta name="date" content="2018-11-24" />
 
 <title>Introduction to jstor</title>
 
@@ -280,7 +280,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Introduction to jstor</h1>
 <h4 class="author"><em>Thomas Klebel</em></h4>
-<h4 class="date"><em>2018-10-17</em></h4>
+<h4 class="date"><em>2018-11-24</em></h4>
 
 
 <div id="TOC">
@@ -310,7 +310,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li><code>jst_get_references</code> (for journal documents)</li>
 <li><code>jst_get_footnotes</code> (for journal documents)</li>
 <li><code>jst_get_book</code> (for books and research reports)</li>
-<li><code>jst_get_chapters</code> (for books and possibly reserach reports)</li>
+<li><code>jst_get_chapters</code> (for books and possibly research reports)</li>
 </ul>
 <p>I will demonstrate their usage using the <a href="http://www.jstor.org/dfr/about/sample-datasets">sample dataset</a> which is provided by JSTOR on their website.</p>
 <div id="general-concept" class="section level1">
@@ -321,8 +321,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li>Content of the file is extracted via XPATH or CSS-expressions.</li>
 <li>The resulting data is returned in a tidy <code>tibble</code>.</li>
 </ol>
-<p>The functions are similar in that all operate on single files (article, book, research report or pamphlet). Depending on the content of the file, the output of the functions might have one or multiple rows. <code>jst_get_article</code> always returns a <code>tibble</code> with one row: the core meta data (like title, id, or first page of the article) are single items, and only one article is processed at a time. Running <code>jst_get_authors</code> for the same article might give you a tibble with one or multiple rows, depending on the number of authors the article has. The same is true for <code>jst_get_references</code> and <code>jst_get_footnotes</code>. If a file has no data on references (they migth still exist, but JSTOR might not have parsed them), the output is only one row, with missing references. If there is data on references, each entry gets its own row. Note however, that the number of rows does not equal the number of references. References usually start with a title like “References”, which is obviously not a reference to another article. Be sure to think carefully about your assumptions and to check the content of your data before you make inferences.</p>
-<p>Books work a bit differently. Searching for data on <a href="https://www.jstor.org/dfr/results" class="uri">https://www.jstor.org/dfr/results</a> lets you filter for books, which are acutally book chapters. If you receive data from DfR on a book chapter, you always get one xml-file with the whole book, including data on all chapters. Ngram or full-text data for the same entry however is processed only from single chapters<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Thus, the output of <code>jst_get_book</code> for a single file is similar to the one from <code>jst_get_article</code>: it is one row with general data about the book. <code>jst_get_chapters</code> gives you data on all chapters, and the resulting tibble therefore might have multiple rows.</p>
+<p>The functions are similar in that all operate on single files (article, book, research report or pamphlet). Depending on the content of the file, the output of the functions might have one or multiple rows. <code>jst_get_article</code> always returns a <code>tibble</code> with one row: the core meta data (like title, id, or first page of the article) are single items, and only one article is processed at a time. Running <code>jst_get_authors</code> for the same article might give you a tibble with one or multiple rows, depending on the number of authors the article has. The same is true for <code>jst_get_references</code> and <code>jst_get_footnotes</code>. If a file has no data on references (they might still exist, but JSTOR might not have parsed them), the output is only one row, with missing references. If there is data on references, each entry gets its own row. Note however, that the number of rows does not equal the number of references. References usually start with a title like “References”, which is obviously not a reference to another article. Be sure to think carefully about your assumptions and to check the content of your data before you make inferences.</p>
+<p>Books work a bit differently. Searching for data on <a href="https://www.jstor.org/dfr/results" class="uri">https://www.jstor.org/dfr/results</a> lets you filter for books, which are actually book chapters. If you receive data from DfR on a book chapter, you always get one xml-file with the whole book, including data on all chapters. Ngram or full-text data for the same entry however is processed only from single chapters<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Thus, the output of <code>jst_get_book</code> for a single file is similar to the one from <code>jst_get_article</code>: it is one row with general data about the book. <code>jst_get_chapters</code> gives you data on all chapters, and the resulting tibble therefore might have multiple rows.</p>
 <p>The following sections showcase the different functions separately.</p>
 </div>
 <div id="application" class="section level1">
@@ -454,23 +454,23 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb5-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># # we need to remove line breaks for knitr::kable() to work properly for printing</span></a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">references &lt;-<span class="st"> </span>references <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">unparsed_refs =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(unparsed_refs, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ref_unparsed =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(ref_unparsed, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>))</a></code></pre></div>
 <p>We have two columns:</p>
 <ul>
 <li><em>file_name</em>: Identifier, can be used for matching.</li>
 <li><em>ref_title</em>: The title of the references sections.</li>
-<li><em>authors</em>: A string of authors. Several authors are separated with <code>;</code>.</li>
-<li><em>editors</em>: A string of editors, if present.</li>
-<li><em>collab</em>: A field that may contain information on the authors, if authors are not available.</li>
-<li><em>title</em>: The title of the cited entry.</li>
-<li><em>year</em>: A year, often the article’s publication year, but not always.</li>
-<li><em>source</em>: The source of the cited entry. For books often the title of the book, for articles the publisher of the journal.</li>
-<li><em>volume</em>: The volume of the journal article.</li>
-<li><em>first_page</em>: The first page of the article/chapter.</li>
-<li><em>last_page</em>: The last page of the article/chapter.</li>
-<li><em>publisher</em>: For books the publisher, for articles often missing.</li>
-<li><em>publication_type</em>: Known types: book, journal, web, other.</li>
-<li><em>unparsed_refs</em>: The full references entry in unparsed form.</li>
+<li><em>ref_authors</em>: A string of authors. Several authors are separated with <code>;</code>.</li>
+<li><em>ref_editors</em>: A string of editors, if present.</li>
+<li><em>ref_collab</em>: A field that may contain information on the authors, if authors are not available.</li>
+<li><em>ref_item_title</em>: The title of the cited entry.</li>
+<li><em>ref_year</em>: A year, often the article’s publication year, but not always.</li>
+<li><em>ref_source</em>: The source of the cited entry. For books often the title of the book, for articles the publisher of the journal.</li>
+<li><em>ref_volume</em>: The volume of the journal article.</li>
+<li><em>ref_first_page</em>: The first page of the article/chapter.</li>
+<li><em>ref_last_page</em>: The last page of the article/chapter.</li>
+<li><em>ref_publisher</em>: For books the publisher, for articles often missing.</li>
+<li><em>ref_publication_type</em>: Known types: book, journal, web, other.</li>
+<li><em>ref_unparsed</em>: The full references entry in unparsed form.</li>
 </ul>
 <p>Here I display 5 random entries:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">references <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -481,17 +481,17 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <tr class="header">
 <th align="left">file_name</th>
 <th align="left">ref_title</th>
-<th align="left">authors</th>
-<th align="left">collab</th>
-<th align="left">title</th>
-<th align="left">year</th>
-<th align="left">source</th>
-<th align="left">volume</th>
-<th align="left">first_page</th>
-<th align="left">last_page</th>
-<th align="left">publisher</th>
-<th align="left">publication_type</th>
-<th align="left">unparsed_refs</th>
+<th align="left">ref_authors</th>
+<th align="left">ref_collab</th>
+<th align="left">ref_item_title</th>
+<th align="left">ref_year</th>
+<th align="left">ref_source</th>
+<th align="left">ref_volume</th>
+<th align="left">ref_first_page</th>
+<th align="left">ref_last_page</th>
+<th align="left">ref_publisher</th>
+<th align="left">ref_publication_type</th>
+<th align="left">ref_unparsed</th>
 </tr>
 </thead>
 <tbody>
@@ -585,18 +585,18 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <tr class="header">
 <th align="left">file_name</th>
 <th align="left">ref_title</th>
-<th align="left">authors</th>
-<th align="left">editors</th>
-<th align="left">collab</th>
-<th align="left">title</th>
-<th align="left">year</th>
-<th align="left">source</th>
-<th align="left">volume</th>
-<th align="left">first_page</th>
-<th align="left">last_page</th>
-<th align="left">publisher</th>
-<th align="left">publication_type</th>
-<th align="left">unparsed_refs</th>
+<th align="left">ref_authors</th>
+<th align="left">ref_editors</th>
+<th align="left">ref_collab</th>
+<th align="left">ref_item_title</th>
+<th align="left">ref_year</th>
+<th align="left">ref_source</th>
+<th align="left">ref_volume</th>
+<th align="left">ref_first_page</th>
+<th align="left">ref_last_page</th>
+<th align="left">ref_publisher</th>
+<th align="left">ref_publication_type</th>
+<th align="left">ref_unparsed</th>
 </tr>
 </thead>
 <tbody>
@@ -841,10 +841,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h3>Matching with references</h3>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">meta_data <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">left_join</span>(references) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(file_name, article_title, volume, pub_year, unparsed_refs) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(file_name, article_title, volume, pub_year, ref_unparsed) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">  </span><span class="kw">head</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; Joining, by = c(&quot;file_name&quot;, &quot;volume&quot;, &quot;first_page&quot;, &quot;last_page&quot;)</span></a></code></pre></div>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; Joining, by = &quot;file_name&quot;</span></a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -852,7 +852,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <th align="left">article_title</th>
 <th align="left">volume</th>
 <th align="right">pub_year</th>
-<th align="left">unparsed_refs</th>
+<th align="left">ref_unparsed</th>
 </tr>
 </thead>
 <tbody>
@@ -861,7 +861,35 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <td align="left">On the Protozoa Parasitic in Frogs</td>
 <td align="left">41</td>
 <td align="right">1922</td>
-<td align="left">NA</td>
+<td align="left">DOBELL, C.C.1909 Researches on the intestinal Protozoa of frogs and toads. Quart. Jour. Micros.Sc., 53:201-276, 4 pl. and 1 textfig.</td>
+</tr>
+<tr class="even">
+<td align="left">article_with_references</td>
+<td align="left">On the Protozoa Parasitic in Frogs</td>
+<td align="left">41</td>
+<td align="right">1922</td>
+<td align="left">1918 Are Entamoeba histolytica and Entamoeba ranarum the same species? An experi-mental study. Parasit., 10:294-310.</td>
+</tr>
+<tr class="odd">
+<td align="left">article_with_references</td>
+<td align="left">On the Protozoa Parasitic in Frogs</td>
+<td align="left">41</td>
+<td align="right">1922</td>
+<td align="left">KUDO, R.1920 Studies on Myxosporidia. A Synopsis of Genera and Species of Myxosporidia.ill. Biol. Monogr., 5:243-503, 25 pl. and 2 textfig.</td>
+</tr>
+<tr class="even">
+<td align="left">article_with_references</td>
+<td align="left">On the Protozoa Parasitic in Frogs</td>
+<td align="left">41</td>
+<td align="right">1922</td>
+<td align="left">1921 On the nature of structures characteristic of Cnidosporidian spores. Trans.Micro. Soc., 40:60-74.</td>
+</tr>
+<tr class="odd">
+<td align="left">article_with_references</td>
+<td align="left">On the Protozoa Parasitic in Frogs</td>
+<td align="left">41</td>
+<td align="right">1922</td>
+<td align="left">1922 On the morphology and life history of a Myxosporidian, Leptotheca ohlmacheri,parasitic in Rana clamitans and Rana pipiens. Parasitology, 14, no. 2.</td>
 </tr>
 </tbody>
 </table>
