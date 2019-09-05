@@ -94,7 +94,7 @@ class(author_chap$authors)
 
 ## ------------------------------------------------------------------------
 author_chap %>% 
-  tidyr::unnest() %>% 
+  tidyr::unnest(authors) %>% 
   select(part_id, given_name, surname) %>% 
   head(10) %>% 
   kable()

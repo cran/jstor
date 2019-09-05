@@ -44,7 +44,7 @@ standard_references <- structure(
   class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, -3L))
 
 
-no_references <- tibble::data_frame(
+no_references <- tibble::tibble(
   file_name = "author-prefix",
   ref_title = NA_character_,
   ref_authors = NA_character_,
@@ -135,7 +135,8 @@ correct_parsed <- structure(
 # tests -----
 test_that("Input data is checked", {
   expect_error(jst_get_references("my_path.txt"))
-  expect_error(jst_get_references("testfiles/standard_book.xml"), "You are using")
+  expect_error(jst_get_references("testfiles/standard_book.xml"), 
+               class = "article_function_for_book")
 })
 
 test_that("class is correct", {

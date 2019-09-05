@@ -209,12 +209,12 @@ capture_functions <- function(...) {
 
 
 is_jstor <- function(fun) {
-  if (identical(environment(fun), environment(find_article))) {
+  if (identical(environment(fun), environment(jst_get_article))) {
     TRUE
   } else {
     fun %>% 
       check_env() %>% 
-      identical(environment(find_article))
+      identical(environment(jst_get_article))
   }
 }
 
@@ -261,10 +261,16 @@ walk_spec <- function(spec_df, chunk_number, n_batches, out_path,
     funs <- unique(funs)
   }
   
-  
-  fun_spec <- spec_df %>% 
-    tidyr::unnest(fun_names) %>% 
-    dplyr::distinct(meta_type, fun_names)
+  # quick hack to fix error
+  if (tidyr_new_interface()) {
+    fun_spec <- spec_df %>% 
+      tidyr::unnest_legacy(fun_names) %>% 
+      dplyr::distinct(meta_type, fun_names)
+  } else {
+    fun_spec <- spec_df %>% 
+      tidyr::unnest(fun_names) %>% 
+      dplyr::distinct(meta_type, fun_names)
+  }
     
   out_paths <- fun_spec %>% 
     mutate(out_paths = paste(out_path, meta_type, fun_names, sep = "_")) %>% 
