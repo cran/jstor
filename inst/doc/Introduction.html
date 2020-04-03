@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2019-09-04" />
+<meta name="date" content="2020-04-03" />
 
 <title>Introduction to jstor</title>
 
@@ -96,7 +96,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -117,9 +117,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -288,7 +285,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -303,7 +301,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Introduction to jstor</h1>
 <h4 class="author">Thomas Klebel</h4>
-<h4 class="date">2019-09-04</h4>
+<h4 class="date">2020-04-03</h4>
 
 
 <div id="TOC">
@@ -964,16 +962,16 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">chapters &lt;-<span class="st"> </span><span class="kw">jst_get_chapters</span>(<span class="kw">jst_example</span>(<span class="st">&quot;book.xml&quot;</span>))</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">str</span>(chapters)</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Classes 'tbl_df', 'tbl' and 'data.frame':    36 obs. of  9 variables:</span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;  $ book_id        : chr  &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; ...</span></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;  $ file_name      : chr  &quot;book&quot; &quot;book&quot; &quot;book&quot; &quot;book&quot; ...</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;  $ part_id        : chr  &quot;j.ctt24hdz7.1&quot; &quot;j.ctt24hdz7.2&quot; &quot;j.ctt24hdz7.3&quot; &quot;j.ctt24hdz7.4&quot; ...</span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;  $ part_label     : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;  $ part_title     : chr  &quot;Front Matter&quot; &quot;Table of Contents&quot; &quot;Acronyms and abbreviations&quot; &quot;Authors’ biographies&quot; ...</span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt;  $ part_subtitle  : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;  $ authors        : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;  $ abstract       : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt;  $ part_first_page: chr  &quot;i&quot; &quot;v&quot; &quot;vii&quot; &quot;xi&quot; ...</span></a></code></pre></div>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; tibble [36 × 9] (S3: tbl_df/tbl/data.frame)</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;  $ book_id        : chr [1:36] &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; &quot;j.ctt24hdz7&quot; ...</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;  $ file_name      : chr [1:36] &quot;book&quot; &quot;book&quot; &quot;book&quot; &quot;book&quot; ...</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;  $ part_id        : chr [1:36] &quot;j.ctt24hdz7.1&quot; &quot;j.ctt24hdz7.2&quot; &quot;j.ctt24hdz7.3&quot; &quot;j.ctt24hdz7.4&quot; ...</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;  $ part_label     : chr [1:36] NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;  $ part_title     : chr [1:36] &quot;Front Matter&quot; &quot;Table of Contents&quot; &quot;Acronyms and abbreviations&quot; &quot;Authors’ biographies&quot; ...</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt;  $ part_subtitle  : chr [1:36] NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;  $ authors        : chr [1:36] NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;  $ abstract       : chr [1:36] NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt;  $ part_first_page: chr [1:36] &quot;i&quot; &quot;v&quot; &quot;vii&quot; &quot;xi&quot; ...</span></a></code></pre></div>
 <p>Without the abstracts (they are rather long) the first 10 chapters look like this:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">chapters <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>abstract) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -1176,6 +1174,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </ol>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

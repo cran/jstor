@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2019-09-04" />
+<meta name="date" content="2020-04-03" />
 
 <title>Automating File Import</title>
 
@@ -96,7 +96,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -117,9 +117,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -288,7 +285,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -303,7 +301,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Automating File Import</h1>
 <h4 class="author">Thomas Klebel</h4>
-<h4 class="date">2019-09-04</h4>
+<h4 class="date">2020-04-03</h4>
 
 
 
@@ -435,13 +433,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 </tbody>
 </table>
-<p>A side note on ngrams: For larger archives, importing all ngrams can take a very long time. It is thus advisable to only import ngrams for articles which you want to analyse, i.e. most likely a subset of the initial request. The function <code>jst_subset_ngrams()</code> helps you with this (see also the section on importing bigrams in the <a href="https://ropensci.github.io/jstor/articles/analysing-n-grams.html#importing-bigrams">case study</a>).</p>
+<p>A side note on ngrams: For larger archives, importing all ngrams can take a very long time. It is thus advisable to only import ngrams for articles which you want to analyse, i.e. most likely a subset of the initial request. The function <code>jst_subset_ngrams()</code> helps you with this (see also the section on importing bigrams in the <a href="https://docs.ropensci.org/jstor/articles/analysing-n-grams.html#importing-bigrams">case study</a>).</p>
 <div id="parallel-processing" class="section level2">
 <h2>Parallel processing</h2>
 <p>Since the above process might take a while for larger archives (files have to be unpacked, read and parsed), there might be a benefit of executing the function in parallel. <code>jst_import_zip()</code> and <code>jst_import()</code> use <code>furrr</code> at their core, therefore adding parallelism is very easy. Just add the following lines at the beginning of your script, and the import will use all available cores:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(future)</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">plan</span>(multiprocess)</a></code></pre></div>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">plan</span>(multisession)</a></code></pre></div>
 <p>You can find out more about futures by reading the package vignette:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">vignette</span>(<span class="st">&quot;future-1-overview&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;future&quot;</span>)</a></code></pre></div>
 </div>
@@ -463,10 +461,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2><code>list.files</code></h2>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">file_names_listed &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path =</span> example_dir, <span class="dt">full.names =</span> T, <span class="dt">pattern =</span> <span class="st">&quot;*.xml&quot;</span>)</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">file_names_listed</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpnqeucZ/Rinst22e535a99801/jstor/extdata/article_with_footnotes.xml&quot; </span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; [2] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpnqeucZ/Rinst22e535a99801/jstor/extdata/article_with_references.xml&quot;</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [3] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpnqeucZ/Rinst22e535a99801/jstor/extdata/book.xml&quot;                   </span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; [4] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpnqeucZ/Rinst22e535a99801/jstor/extdata/parsed_references.xml&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpoRgdX4/Rinst868f415ea2bd/jstor/extdata/article_with_footnotes.xml&quot; </span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; [2] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpoRgdX4/Rinst868f415ea2bd/jstor/extdata/article_with_references.xml&quot;</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [3] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpoRgdX4/Rinst868f415ea2bd/jstor/extdata/book.xml&quot;                   </span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; [4] &quot;/private/var/folders/kq/q5brchkd1vsbvt2ykdl5qcvc0000gn/T/RtmpoRgdX4/Rinst868f415ea2bd/jstor/extdata/parsed_references.xml&quot;</span></a></code></pre></div>
 <div id="system-and-find" class="section level3">
 <h3><code>system</code> and <code>find</code></h3>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">file_names &lt;-<span class="st"> </span><span class="kw">system</span>(<span class="kw">paste0</span>(<span class="st">&quot;cd &quot;</span>, example_dir, <span class="st">&quot;; find . -name '*.xml' -type f&quot;</span>), <span class="dt">intern =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
@@ -577,6 +575,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

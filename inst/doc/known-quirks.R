@@ -1,10 +1,10 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ---- message=FALSE------------------------------------------------------
+## ---- message=FALSE-----------------------------------------------------------
 library(jstor)
 library(dplyr)
 
@@ -23,23 +23,23 @@ input <- tibble::tribble(
 input %>% 
   mutate(n_pages = jst_get_total_pages(first_page, last_page, page_range))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 input %>% 
   jst_add_total_pages()
 
-## ---- results='asis'-----------------------------------------------------
+## ---- results='asis'----------------------------------------------------------
 sample_article <- jst_get_article(jst_example("article_with_references.xml")) 
 
 knitr::kable(sample_article)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 sample_article %>% 
   jst_unify_journal_id() %>% 
   left_join(jst_get_journal_overview()) %>% 
   tidyr::gather(variable, value) %>% 
   knitr::kable()
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 sample_article %>% 
   pull(language)
 

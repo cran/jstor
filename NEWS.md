@@ -1,3 +1,9 @@
+# jstor 0.3.8
+* The package homepage has switched from https://ropensci.github.io/jstor to
+https://docs.ropensci.org/jstor. This simplifies building the site and aligns it
+with the rest of rOpenSci's packages. #80
+* Compatibility fix for tibble 3.0.0.
+
 # jstor 0.3.7
 This is a small release to fix compatibility with `tidyr v1.0.0`. Furthermore,
 the formerly defunct functions following the old naming conventions (like
@@ -133,7 +139,7 @@ time. It is thus advisable to only import ngrams for articles which you
 want to analyse, i.e. most likely a subset of the initial request. The new 
 function `jst_subset_ngrams()` helps you with this (see also the section on
 importing bigrams in the 
-[case study](https://ropensci.github.io/jstor/articles/analysing-n-grams.html#importing-bigrams).
+[case study](https://docs.ropensci.org/jstor/articles/analysing-n-grams.html#importing-bigrams).
 
 Before importing all files from a zip-archive, you can get a quick overview with
 `jst_preview_zip()`.
