@@ -41,6 +41,9 @@ jst_augment <- function(meta_data, quietly = FALSE) {
 #' should not be called on page ranges.
 #' 
 #' @param page A character vector for pages.
+#' @return An integer vector, cleaned and converted from the input vector.
+#' 
+#' 
 #' @export
 #' @examples 
 #' jst_clean_page("2")
@@ -72,6 +75,10 @@ jst_clean_page <- function(page) {
 #' 
 #' @param meta_data Data which was processed via [jst_get_article()].
 #' @param quietly Should warnings from converting page ranges be suppressed?
+#' 
+#' @return A `tibble`, as provided with in `meta_data`, with an additional 
+#' column on total number of pages.
+#' 
 #' @export
 #' @seealso [jst_get_total_pages()]
 jst_add_total_pages <- function(meta_data,
@@ -233,7 +240,7 @@ parse_ranges <- function(page_range, quietly = FALSE) {
   # detect roman numerals which are occasionally used for introduction sections
   roman_chars <- str_detect(splitted_df$splitted, "x|i|v|X|I|V")
   
-  if (any(roman_chars, na.rm = T) && !quietly) {
+  if (any(roman_chars, na.rm = TRUE) && !quietly) {
     warning("Cannot handle roman numerals (`x|i|v|X|I|V`) in rows (",
             paste(which(roman_chars), collapse = ", "),
             ") when computing ",

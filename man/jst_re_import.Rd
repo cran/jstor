@@ -12,6 +12,10 @@ jst_re_import(file, warn = TRUE)
 \item{warn}{Should warnings be emitted, if the type of file cannot be
 determined?}
 }
+\value{
+A \code{tibble}, with the columns determined based on heuristics applied
+to the input file.
+}
 \description{
 \code{jst_re_import()} lets you re-import a file which was exported via
 \code{\link[=jst_import]{jst_import()}} or \code{\link[=jst_import_zip]{jst_import_zip()}}.
@@ -24,7 +28,7 @@ recognized, files are recognized based on the number of columns. Since both
 references and footnotes have only two columns, the first line is inspected
 for either \code{"Referenc...|Bilbio...|Endnote..."} or \code{"Footnote..."}.
 In case there is still no match, the file is read with
-\code{\link[readr:read_csv]{readr::read_csv()}} with \code{guess_max = 5000} and a warning is raised.
+\code{\link[readr:read_delim]{readr::read_csv()}} with \code{guess_max = 5000} and a warning is raised.
 }
 \seealso{
 \code{\link[=jst_combine_outputs]{jst_combine_outputs()}}

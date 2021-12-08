@@ -12,13 +12,29 @@
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2020-06-04" />
+<meta name="date" content="2021-12-07" />
 
 <title>Known Quirks of JSTOR/DfR Data</title>
 
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -104,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -301,7 +318,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Known Quirks of JSTOR/DfR Data</h1>
 <h4 class="author">Thomas Klebel</h4>
-<h4 class="date">2020-06-04</h4>
+<h4 class="date">2021-12-07</h4>
 
 
 <div id="TOC">
@@ -333,7 +350,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </ul>
 <p>An example for the first case are references. Four different ways how references can be specified are known at this time, and all are imported in specific ways to deal this variation. There might however be other formats, which should lead to an informative error when trying to import them via <code>jst_get_references()</code>.</p>
 <p>An example for the latter case are page numbers. Most of the time, the entries for page numbers are simply <code>42</code>, or <code>61</code>. This is as expected, and could be parsed as integers. Sometimes, there are characters present, like <code>M77</code>. This would pose no problem either, we could simply extract all digits via regex and parse as character. Unfortunately, sometimes the page is specified like this: <code>v75i2p84</code>. Extracting all digits would result in <code>75284</code>, which is wrong by a long shot. Since there might be other ways of specifying pages, <code>jstor</code> does not attempt to parse the pages to integers when importing. However, it offers a set of convenience functions which deal with a few common cases (see <code>jst_augment()</code> and below).</p>
-<p>There are many other problems or peculiarities like this. This vignette tries to list as many as possible, and offer solutions for dealing with them. Unfortunately I have neither the time nor the interest to wade through all the data which you could get from DfR in order to find all possible quirks. The following list is thus inevitably incomplete. If you encounter new quirks/peculiarities, it would be greatly appreciated if you sent me an email, or <a href="https://github.com/tklebel/jstor/issues">opened an issue at GitHub</a>. I will then include your findings in future version of this vignette, so this vignette can be a starting point for everybody who conducts text analysis with data from JSTOR/DfR.</p>
+<p>There are many other problems or peculiarities like this. This vignette tries to list as many as possible, and offer solutions for dealing with them. Unfortunately I have neither the time nor the interest to wade through all the data which you could get from DfR in order to find all possible quirks. The following list is thus inevitably incomplete. If you encounter new quirks/peculiarities, it would be greatly appreciated if you sent me an email, or <a href="https://github.com/ropensci/jstor/issues">opened an issue at GitHub</a>. I will then include your findings in future version of this vignette, so this vignette can be a starting point for everybody who conducts text analysis with data from JSTOR/DfR.</p>
 </div>
 <div id="data-augmentation" class="section level1">
 <h1>Data augmentation</h1>
@@ -355,7 +372,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>In the following sections, known issues with data from DfR are described in greater detail.</p>
 <div id="page-numbers" class="section level2">
 <h2>Page numbers</h2>
-<p>Page numbers are a mess. Besides the issues mentioned above, page numbers might sometimes be specified as “pp. 1234-83” as in <a href="http://www.jstor.org/stable/10.1086/659100">this article from the American Journal of Sociology</a>. Of course, this results in <code>first_page = 1234</code> and <code>last_page = 83</code>, and the computed number of total pages from <code>jst_get_total_pages()</code> will be negative. There is currently no general solution for this issue.</p>
+<p>Page numbers are a mess. Besides the issues mentioned above, page numbers might sometimes be specified as “pp. 1234-83” as in <a href="https://www.jstor.org/stable/10.1086/659100">this article from the American Journal of Sociology</a>. Of course, this results in <code>first_page = 1234</code> and <code>last_page = 83</code>, and the computed number of total pages from <code>jst_get_total_pages()</code> will be negative. There is currently no general solution for this issue.</p>
 <div id="calculating-total-pages" class="section level3">
 <h3>Calculating total pages</h3>
 <p>As outlined above, page numbers come in very different forms. Besides this problem, there is actually another issue. Imagine you would like to quantify the lengths of articles. Obviously you will need information on the first and the last page of the articles. Furthermore, the pages need to be parsed properly: you will run into troubles if you calculate page numbers like <code>75284 - 42 + 1</code>, in case the number was parsed badly. <code>jst_clean_page()</code> tries to do this properly, based on a few known possibilities:</p>
@@ -383,7 +400,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb1-15" data-line-number="15"></a>
 <a class="sourceLine" id="cb1-16" data-line-number="16">input <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb1-17" data-line-number="17"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">n_pages =</span> <span class="kw">jst_get_total_pages</span>(first_page, last_page, page_range))</a>
-<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="co">#&gt; # A tibble: 8 x 4</span></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="co">#&gt; # A tibble: 8 × 4</span></a>
 <a class="sourceLine" id="cb1-19" data-line-number="19"><span class="co">#&gt;   first_page last_page page_range  n_pages</span></a>
 <a class="sourceLine" id="cb1-20" data-line-number="20"><span class="co">#&gt;        &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;</span></a>
 <a class="sourceLine" id="cb1-21" data-line-number="21"><span class="co">#&gt; 1         NA        NA &lt;NA&gt;             NA</span></a>
@@ -397,7 +414,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>This is actually identical to using <code>jst_add_total_pages()</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">input <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">  </span><span class="kw">jst_add_total_pages</span>()</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; # A tibble: 8 x 4</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; # A tibble: 8 × 4</span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;   first_page last_page page_range  n_pages</span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt;        &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;</span></a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 1         NA        NA &lt;NA&gt;             NA</span></a>
@@ -422,6 +439,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">knitr<span class="op">::</span><span class="kw">kable</span>(sample_article)</a></code></pre></div>
 <table>
+<colgroup>
+<col width="8%"></col>
+<col width="4%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="17%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="4%"></col>
+<col width="5%"></col>
+<col width="11%"></col>
+<col width="2%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
@@ -478,6 +516,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; Joining, by = &quot;journal_id&quot;</span></a></code></pre></div>
 <table>
+<colgroup>
+<col width="12%"></col>
+<col width="87%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">variable</th>

@@ -37,7 +37,7 @@ references %>%
 ## -----------------------------------------------------------------------------
 jst_get_references(
   jst_example("parsed_references.xml"),
-  parse_refs = T
+  parse_refs = TRUE
 ) %>% 
   kable()
 

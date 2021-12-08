@@ -1,6 +1,3 @@
-context("writing-to-file")
-library(readr)
-
 paths <- c("testfiles/standard_case.xml", "broken_path.txt")
 
 # # nolint start
@@ -21,7 +18,7 @@ test_that("writing correct results to file works", {
   jstor_convert_to_file(paths, 1, file.path(temp_dir, "/meta_data"), 
                         jst_get_article, col_names = TRUE, n_batches = 1)
 
-  expect_identical(read_csv("testfiles/correct_meta_data.csv",
+  expect_equal(read_csv("testfiles/correct_meta_data.csv",
                             col_names = TRUE),
                    read_csv(file.path(temp_dir, "/meta_data-1.csv"),
                             col_names = TRUE))
@@ -35,7 +32,7 @@ test_that("writing to file in parallel works", {
   jstor_convert_to_file(paths, 1, file.path(temp_dir, "/meta_data"), jst_get_article,
                         col_names = TRUE, n_batches = 1)
   
-  expect_identical(read_csv("testfiles/correct_meta_data.csv",
+  expect_equal(read_csv("testfiles/correct_meta_data.csv",
                             col_names = TRUE),
                    read_csv(file.path(temp_dir, "/meta_data-1.csv"),
                             col_names = TRUE))
@@ -48,7 +45,7 @@ test_that("not writing column names works", {
   jstor_convert_to_file(paths, 1, file.path(temp_dir, "/meta_data"), jst_get_article,
                         col_names = FALSE, n_batches = 1)
   
-  expect_identical(read_csv("testfiles/correct_meta_data_wo_cols.csv",
+  expect_equal(read_csv("testfiles/correct_meta_data_wo_cols.csv",
                             col_names = FALSE),
                    read_csv(file.path(temp_dir, "/meta_data-1.csv"),
                             col_names = FALSE))
@@ -66,9 +63,6 @@ test_that("writing error messages to file works", {
   res <- read_csv(file.path(temp_dir, "meta_data_broken-1.csv"),
                   col_names = TRUE, col_types = cols(id = col_integer()))
 
-  # the following is needed for expect_identical
-  attr(res, "spec") <- NULL
-
   correct_res <- structure(
     list(
       id = 2L, 
@@ -77,7 +71,7 @@ test_that("writing error messages to file works", {
     row.names = c(NA, -1L), 
     class = c("spec_tbl_df", "tbl_df", "tbl", "data.frame"))
 
-  expect_identical(res, correct_res)
+  expect_equal(res, correct_res)
 
   unlink(temp_dir)
 })
@@ -88,7 +82,7 @@ test_that("import wrapper works with column names", {
   jst_import(paths, out_file = "meta_data", out_path = temp_dir,
              .f = jst_get_article, col_names = T)
 
-  expect_identical(read_csv("testfiles/correct_meta_data.csv",
+  expect_equal(read_csv("testfiles/correct_meta_data.csv",
                             col_names = TRUE),
                    read_csv(file.path(temp_dir, "/meta_data-1.csv"),
                             col_names = TRUE))
@@ -101,7 +95,7 @@ test_that("import wrapper works without column names", {
   jst_import(paths, out_file = "meta_data", out_path = temp_dir,
              .f = jst_get_article, col_names = FALSE)
   
-  expect_identical(read_csv("testfiles/correct_meta_data_wo_cols.csv",
+  expect_equal(read_csv("testfiles/correct_meta_data_wo_cols.csv",
                             col_names = FALSE),
                    read_csv(file.path(temp_dir, "/meta_data-1.csv"),
                             col_names = FALSE))
@@ -114,7 +108,7 @@ test_that("files_per_batch works", {
   jst_import(paths, out_file = "meta_data", out_path = temp_dir,
              .f = jst_get_article, col_names = FALSE, files_per_batch = 2)
   
-  expect_identical(read_csv("testfiles/correct_meta_data_wo_cols.csv",
+  expect_equal(read_csv("testfiles/correct_meta_data_wo_cols.csv",
                             col_names = FALSE),
                    read_csv(file.path(temp_dir, "/meta_data-1.csv"),
                             col_names = FALSE))

@@ -1,7 +1,4 @@
-context("author-import")
-library(xml2)
-library(magrittr)
-library(tibble)
+suppressPackageStartupMessages(library(tibble))
 
 # import files
 test_file_no_author <- "testfiles/erratum.xml" %>%

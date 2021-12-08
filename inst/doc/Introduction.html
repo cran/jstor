@@ -12,13 +12,29 @@
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2020-06-04" />
+<meta name="date" content="2021-12-07" />
 
 <title>Introduction to jstor</title>
 
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -104,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -301,7 +318,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to jstor</h1>
 <h4 class="author">Thomas Klebel</h4>
-<h4 class="date">2020-06-04</h4>
+<h4 class="date">2021-12-07</h4>
 
 
 <div id="TOC">
@@ -322,7 +339,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </ul>
 </div>
 
-<p>The tool <a href="http://www.jstor.org/dfr/">Data for Research (DfR)</a> by JSTOR is a valuable source for citation analysis and text mining. <code>jstor</code> provides functions and suggests workflows for importing datasets from DfR.</p>
+<p>The tool <a href="https://www.jstor.org/dfr/">Data for Research (DfR)</a> by JSTOR is a valuable source for citation analysis and text mining. <code>jstor</code> provides functions and suggests workflows for importing datasets from DfR.</p>
 <p>When using DfR, requests for datasets can be made for small excerpts (max. 25,000 records) or large ones, which require an agreement between the researcher and JSTOR. <code>jstor</code> was developed to deal with very large datasets which require an agreement, but can be used with smaller ones as well.</p>
 <p>The most important set of functions is a group of <code>jst_get_*</code> functions:</p>
 <ul>
@@ -333,7 +350,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><code>jst_get_book</code> (for books and research reports)</li>
 <li><code>jst_get_chapters</code> (for books and possibly research reports)</li>
 </ul>
-<p>I will demonstrate their usage using the <a href="http://www.jstor.org/dfr/about/sample-datasets">sample dataset</a> which is provided by JSTOR on their website.</p>
+<p>I will demonstrate their usage using the <a href="https://www.jstor.org/dfr/about/sample-datasets">sample dataset</a> which is provided by JSTOR on their website.</p>
 <div id="general-concept" class="section level1">
 <h1>General Concept</h1>
 <p>All functions from the <code>jst_get_*</code> family which are concerned with meta data operate along the same lines:</p>
@@ -356,7 +373,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>jst_get_article</h2>
 <p>The basic usage of the <code>jst_get_*</code> functions is very simple. They take only one argument, the path to the file to import:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">meta_data &lt;-<span class="st"> </span><span class="kw">jst_get_article</span>(<span class="dt">file_path =</span> <span class="kw">jst_example</span>(<span class="st">&quot;article_with_references.xml&quot;</span>))</a></code></pre></div>
-<p>The resulting object is a <code>tibble</code> with one row and 17 columns. The columns correspond to most of the elements documented here: <a href="http://www.jstor.org/dfr/about/technical-specifications" class="uri">http://www.jstor.org/dfr/about/technical-specifications</a>.</p>
+<p>The resulting object is a <code>tibble</code> with one row and 17 columns. The columns correspond to most of the elements documented here: <a href="https://www.jstor.org/dfr/about/technical-specifications" class="uri">https://www.jstor.org/dfr/about/technical-specifications</a>.</p>
 <p>The columns are:</p>
 <ul>
 <li>file_name <em>(chr)</em>: The file name of the original .xml-file. Can be used for joining with other parts (authors, references, footnotes, full-texts).</li>
@@ -380,6 +397,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Since the output from all functions are tibbles, the result is nicely formatted:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">meta_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
+<colgroup>
+<col width="8%"></col>
+<col width="4%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="17%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="4%"></col>
+<col width="5%"></col>
+<col width="11%"></col>
+<col width="2%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
@@ -498,6 +536,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
+<colgroup>
+<col width="6%"></col>
+<col width="8%"></col>
+<col width="3%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="2%"></col>
+<col width="2%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="5%"></col>
+<col width="51%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
@@ -595,13 +648,29 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </table>
 <p>This example shows several things: <code>file_name</code> is identical among rows, since it identifies the article and all references came from one article. The the sample file doesn’t follow a typical convention (it was published in 1922), therefore there are several different headings (<code>ref_title</code>). Usually, this is only “Bibliography” or “References”.</p>
 <p>Since the references were not parsed by JSTOR, we only get an unparsed version. In general, the content of references (<code>unparsed_refs</code>) is in quite a raw state, quite often the result of digitising scans via OCR. For example, the last entry reads like this: <code>MACHADO, A.1911 Zytologische Untersuchungen fiber Trypanosoma rotatorium ...</code>. There is an error here: <code>fiber</code> should be <code>über</code>. The language of the source is German, but the OCR-software assumed English. Therefore, it didn’t recognize the <em>Umlaut</em>. Similar errors are common for text read via OCR.</p>
-<p>For other files, we can set <code>parse_refs = T</code>, so references will be imported in their parsed form, whenever they are available.</p>
+<p>For other files, we can set <code>parse_refs = TRUE</code>, so references will be imported in their parsed form, whenever they are available.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">jst_get_references</span>(</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="kw">jst_example</span>(<span class="st">&quot;parsed_references.xml&quot;</span>),</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="dt">parse_refs =</span> T</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="dt">parse_refs =</span> <span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4">) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
+<colgroup>
+<col width="3%"></col>
+<col width="2%"></col>
+<col width="6%"></col>
+<col width="3%"></col>
+<col width="4%"></col>
+<col width="11%"></col>
+<col width="1%"></col>
+<col width="13%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="2%"></col>
+<col width="2%"></col>
+<col width="4%"></col>
+<col width="37%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
@@ -763,6 +832,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">footnotes =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(footnotes, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
+<colgroup>
+<col width="26%"></col>
+<col width="73%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
@@ -811,6 +884,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">full_text =</span> stringr<span class="op">::</span><span class="kw">str_remove_all</span>(full_text, <span class="st">&quot;</span><span class="ch">\\\n</span><span class="st">&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb10-4" data-line-number="4"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
+<colgroup>
+<col width="2%"></col>
+<col width="96%"></col>
+<col width="1%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
@@ -867,6 +945,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">  </span><span class="kw">kable</span>()</a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; Joining, by = &quot;file_name&quot;</span></a></code></pre></div>
 <table>
+<colgroup>
+<col width="10%"></col>
+<col width="15%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="67%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
@@ -922,7 +1007,22 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Quite recently DfR added book chapters to their stack. To import metadata about the books and chapters, jstor supplies <code>jst_get_book</code> and <code>jst_get_chapters</code>.</p>
 <p><code>jst_get_book</code> is very similar to <code>jst_get_article</code>. We obtain general information about the complete book:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">jst_get_book</span>(<span class="kw">jst_example</span>(<span class="st">&quot;book.xml&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="5%"></col>
+<col width="4%"></col>
+<col width="8%"></col>
+<col width="16%"></col>
+<col width="12%"></col>
+<col width="3%"></col>
+<col width="4%"></col>
+<col width="4%"></col>
+<col width="14%"></col>
+<col width="7%"></col>
+<col width="9%"></col>
+<col width="3%"></col>
+<col width="4%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">book_id</th>
@@ -978,6 +1078,16 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw">head</span>(<span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb15-4" data-line-number="4"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
+<colgroup>
+<col width="7%"></col>
+<col width="6%"></col>
+<col width="9%"></col>
+<col width="7%"></col>
+<col width="31%"></col>
+<col width="22%"></col>
+<col width="5%"></col>
+<col width="10%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">book_id</th>
@@ -1165,7 +1275,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 </tbody>
 </table>
-<p>You can learn more about the concept of list-columns in Hadley Wickham’s book <a href="http://r4ds.had.co.nz/many-models.html">R for Data Science</a>.</p>
+<p>You can learn more about the concept of list-columns in Hadley Wickham’s book <a href="https://r4ds.had.co.nz/many-models.html">R for Data Science</a>.</p>
 </div>
 <div class="footnotes">
 <hr />

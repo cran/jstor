@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The tool [Data for Research (DfR)](http://www.jstor.org/dfr/) by JSTOR is a
+The tool [Data for Research (DfR)](https://www.jstor.org/dfr/) by JSTOR is a
 valuable source for citation analysis and text mining. `jstor`
 provides functions and suggests workflows for importing
 datasets from DfR.
@@ -39,7 +39,7 @@ The most important set of functions is a group of `jst_get_*` functions:
 - `jst_get_chapters` (for books and possibly research reports)
 
 I will demonstrate their usage using the
-[sample dataset](http://www.jstor.org/dfr/about/sample-datasets)
+[sample dataset](https://www.jstor.org/dfr/about/sample-datasets)
 which is provided by JSTOR on their website.
 
 # General Concept
@@ -102,7 +102,7 @@ meta_data <- jst_get_article(file_path = jst_example("article_with_references.xm
 ```
 
 The resulting object is a `tibble` with one row and 17 columns. The columns
-correspond to most of the elements documented here: http://www.jstor.org/dfr/about/technical-specifications.
+correspond to most of the elements documented here: https://www.jstor.org/dfr/about/technical-specifications.
 
 The columns are:
 
@@ -212,13 +212,13 @@ There is an error here: `fiber` should be `über`. The language of the source
 is German, but the OCR-software assumed English. Therefore, it didn't
 recognize the *Umlaut*. Similar errors are common for text read via OCR.
 
-For other files, we can set `parse_refs = T`, so references will be imported 
+For other files, we can set `parse_refs = TRUE`, so references will be imported 
 in their parsed form, whenever they are available. 
 
 ```{r}
 jst_get_references(
   jst_example("parsed_references.xml"),
-  parse_refs = T
+  parse_refs = TRUE
 ) %>% 
   kable()
 ```
@@ -347,4 +347,4 @@ author_chap %>%
 ```
 
 You can learn more about the concept of list-columns in Hadley Wickham's book
-[R for Data Science](http://r4ds.had.co.nz/many-models.html).
+[R for Data Science](https://r4ds.had.co.nz/many-models.html).

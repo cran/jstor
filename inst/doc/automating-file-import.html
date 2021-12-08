@@ -12,13 +12,29 @@
 
 <meta name="author" content="Thomas Klebel" />
 
-<meta name="date" content="2020-06-04" />
+<meta name="date" content="2021-12-07" />
 
 <title>Automating File Import</title>
 
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -104,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -301,7 +318,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Automating File Import</h1>
 <h4 class="author">Thomas Klebel</h4>
-<h4 class="date">2020-06-04</h4>
+<h4 class="date">2021-12-07</h4>
 
 
 
@@ -386,6 +403,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb6-3" data-line-number="3">) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
+<colgroup>
+<col width="11%"></col>
+<col width="4%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="6%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="6%"></col>
+<col width="11%"></col>
+<col width="2%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="4%"></col>
+<col width="3%"></col>
+<col width="4%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
@@ -459,12 +497,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="list.files" class="section level2">
 <h2><code>list.files</code></h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">file_names_listed &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path =</span> example_dir, <span class="dt">full.names =</span> T, <span class="dt">pattern =</span> <span class="st">&quot;*.xml&quot;</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">file_names_listed</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] &quot;/private/var/folders/vd/2jv5x6wj3_s7kl22w5jjg2qh0000gn/T/RtmpMxonk4/Rinst271515001148/jstor/extdata/article_with_footnotes.xml&quot; </span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; [2] &quot;/private/var/folders/vd/2jv5x6wj3_s7kl22w5jjg2qh0000gn/T/RtmpMxonk4/Rinst271515001148/jstor/extdata/article_with_references.xml&quot;</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [3] &quot;/private/var/folders/vd/2jv5x6wj3_s7kl22w5jjg2qh0000gn/T/RtmpMxonk4/Rinst271515001148/jstor/extdata/book.xml&quot;                   </span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; [4] &quot;/private/var/folders/vd/2jv5x6wj3_s7kl22w5jjg2qh0000gn/T/RtmpMxonk4/Rinst271515001148/jstor/extdata/parsed_references.xml&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">file_names_listed &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path =</span> example_dir, <span class="dt">full.names =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">                                <span class="dt">pattern =</span> <span class="st">&quot;*.xml&quot;</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">file_names_listed</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; [1] &quot;/private/var/folders/vd/2jv5x6wj3_s7kl22w5jjg2qh0000gn/T/Rtmp45iBWU/Rinst9aaa1abcce5/jstor/extdata/article_with_footnotes.xml&quot; </span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [2] &quot;/private/var/folders/vd/2jv5x6wj3_s7kl22w5jjg2qh0000gn/T/Rtmp45iBWU/Rinst9aaa1abcce5/jstor/extdata/article_with_references.xml&quot;</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; [3] &quot;/private/var/folders/vd/2jv5x6wj3_s7kl22w5jjg2qh0000gn/T/Rtmp45iBWU/Rinst9aaa1abcce5/jstor/extdata/book.xml&quot;                   </span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; [4] &quot;/private/var/folders/vd/2jv5x6wj3_s7kl22w5jjg2qh0000gn/T/Rtmp45iBWU/Rinst9aaa1abcce5/jstor/extdata/parsed_references.xml&quot;</span></a></code></pre></div>
 <div id="system-and-find" class="section level3">
 <h3><code>system</code> and <code>find</code></h3>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">file_names &lt;-<span class="st"> </span><span class="kw">system</span>(<span class="kw">paste0</span>(<span class="st">&quot;cd &quot;</span>, example_dir, <span class="st">&quot;; find . -name '*.xml' -type f&quot;</span>), <span class="dt">intern =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
@@ -492,6 +531,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb13-6" data-line-number="6"><span class="st">  </span><span class="kw">map_df</span>(jst_get_article) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb13-7" data-line-number="7"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
+<colgroup>
+<col width="8%"></col>
+<col width="4%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="17%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="4%"></col>
+<col width="5%"></col>
+<col width="11%"></col>
+<col width="2%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="2%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">file_name</th>
@@ -564,7 +624,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">jst_import</span>(article_paths, <span class="dt">out_file =</span> <span class="st">&quot;my_second_test&quot;</span>, <span class="dt">.f =</span> jst_get_article, </a>
 <a class="sourceLine" id="cb14-2" data-line-number="2">           <span class="dt">out_path =</span> tmp)</a>
 <a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; Starting to import 2 file(s).</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Finished importing 2 file(s) in 0.09 secs.</span></a></code></pre></div>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Finished importing 2 file(s) in 0.06 secs.</span></a></code></pre></div>
 <p>The result is again written to disk, as can be seen below:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">list.files</span>(tmp, <span class="dt">pattern =</span> <span class="st">&quot;csv&quot;</span>)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt; [1] &quot;my_second_test-1.csv&quot;                         </span></a>

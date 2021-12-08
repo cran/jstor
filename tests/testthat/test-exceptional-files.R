@@ -1,7 +1,3 @@
-context("exceptional-files")
-library(xml2)
-library(magrittr)
-
 # import files
 result <- "testfiles/standard_case.xml" %>%
   jst_get_article() %>%
